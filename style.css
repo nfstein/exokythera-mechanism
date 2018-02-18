@@ -1,0 +1,12 @@
+img {
+    width: 120px;
+    margin: 20px;
+  }
+
+.planet_1{
+    clip-path: url(#planet_1);
+  }
+  
+.planet_2 {
+    clip-path: url(#planet_2);
+  }  
