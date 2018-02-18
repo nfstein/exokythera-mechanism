@@ -24,18 +24,26 @@ var planets = [{
         "orbitRadius": 120,
         "timeToComplete": "16s",
         "color": "green"
+    },
+    {
+        "name": "planet_4",
+        "radius": 15,
+        "mass": 500,
+        "orbitRadius": 150,
+        "timeToComplete": "9s",
+        "color": "#aa3382"
     }
 ];
-var bodySelection = d3.select("body");
+var bodySelection = d3.select("#home");
 var svgSelection = bodySelection.append("svg")
-    .attr("width", 400)
-    .attr("height", 400)
-    .attr("style","padding: 12em");
+    .attr("width", 600)
+    .attr("height", 750)
+    .attr("style","padding: 14em");
 var sunSelection = svgSelection.append("circle")
     .attr("cx", sunXPosition)
     .attr("cy", sunYPosition)
     .attr("r", 30)
-    .attr("style", "fill:" + "black");
+    .attr("style", "fill:" + "#e6e600");
 
 
 //Appending planets to the body

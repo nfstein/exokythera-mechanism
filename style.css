@@ -9,4 +9,11 @@ img {
   
 .planet_2 {
     clip-path: url(#planet_2);
-  }  
+  }
+  
+  #home {
+    margin:auto;
+    background-image:url("stars.gif");
+    background-size:auto 40%;  
+    background-position:center top;
+ }
