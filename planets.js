@@ -33,7 +33,23 @@ var planets = [{
         "orbitRadius": 150,
         "timeToComplete": "18s",
         "color": "#aa3382"
-    }
+    },
+    {
+        "name": "planet_5",
+        "radius": 18,
+        "mass": 500,
+        "orbitRadius": 180,
+        "timeToComplete": "32s",
+        "color": "#1c266b"
+    },
+    {
+        "name": "planet_6",
+        "radius": 32,
+        "mass": 500,
+        "orbitRadius": 250,
+        "timeToComplete": "14s",
+        "color": "#af160e"
+    },
 ];
 var bodySelection = d3.select("#home");
 var select = d3.select('#home')
