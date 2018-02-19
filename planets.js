@@ -68,11 +68,6 @@ var svgSelection = bodySelection.append("svg")
     .attr("width", 600)
     .attr("height", 750)
     .attr("style","padding: 14em");
-var sunSelection = svgSelection.append("circle")
-    .attr("cx", sunXPosition)
-    .attr("cy", sunYPosition)
-    .attr("r", 30)
-    .attr("style", "fill:" + "#e6e600");
     
 var options = select
       .selectAll('option')
@@ -137,6 +132,32 @@ planetGradients.append("stop")
 //Finally a darker color at the outside
 planetGradients.append("stop")
 	.attr("offset",  "100%")
-	.attr("stop-color", function(d) { return d3.rgb(d.color).darker(1.75); });
+    .attr("stop-color", function(d) { return d3.rgb(d.color).darker(1.75); });
+
+
+//Append a radialGradient element to the defs and give it a unique id
+var radialGradient = d3.select("defs").append("radialGradient")
+    .attr("id", "radial-gradient")
+    .attr("cx", "50%")    //The x-center of the gradient, same as a typical SVG circle
+    .attr("cy", "50%")    //The y-center of the gradient
+    .attr("r", "50%"); 
+//Add colors to make the gradient appear like a Sun
+radialGradient.append("stop")
+    .attr("offset", "0%")
+    .attr("stop-color", "#FFF76B");
+radialGradient.append("stop")
+    .attr("offset", "50%")
+    .attr("stop-color", "#FFF845");
+radialGradient.append("stop")
+    .attr("offset", "90%")
+    .attr("stop-color", "#FFDA4E");
+radialGradient.append("stop")
+    .attr("offset", "100%")
+    .attr("stop-color", "#FB8933");
+var sunSelection = svgSelection.append("circle")
+    .attr("cx", sunXPosition)
+    .attr("cy", sunYPosition)
+    .attr("r", 30)
+    .attr("style", "fill:" +  "url(#radial-gradient)");
 buildSolarSystem();
 
