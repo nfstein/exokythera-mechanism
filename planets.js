@@ -50,6 +50,14 @@ var planets = [{
         "timeToComplete": "14s",
         "color": "#af160e"
     },
+    {
+        "name": "planet_7",
+        "radius": 14,
+        "mass": 500,
+        "orbitRadius": 210,
+        "timeToComplete": "18s",
+        "color": "#067f82"
+    }
 ];
 var bodySelection = d3.select("#home");
 var select = d3.select('#home')
