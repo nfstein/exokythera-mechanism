@@ -1,12 +1,13 @@
 const sunXPosition = 100;
 const sunYPosition = 100;
+var solarSystm = ["Trappist-1", "Sun", "Alpha Centauri"];
 
 var planets = [{
         "name": "planet_1",
         "radius": 5,
         "mass": 100,
         "orbitRadius": 80,
-        "timeToComplete": "6s",
+        "timeToComplete": "20s",
         "color": "red"
     },
     {
@@ -14,7 +15,7 @@ var planets = [{
         "radius": 8,
         "mass": 400,
         "orbitRadius": 100,
-        "timeToComplete": "12s",
+        "timeToComplete": "22s",
         "color": "orange"
     },
     {
@@ -22,7 +23,7 @@ var planets = [{
         "radius": 10,
         "mass": 500,
         "orbitRadius": 120,
-        "timeToComplete": "16s",
+        "timeToComplete": "28s",
         "color": "green"
     },
     {
@@ -30,11 +31,15 @@ var planets = [{
         "radius": 15,
         "mass": 500,
         "orbitRadius": 150,
-        "timeToComplete": "9s",
+        "timeToComplete": "18s",
         "color": "#aa3382"
     }
 ];
 var bodySelection = d3.select("#home");
+var select = d3.select('#home')
+      .append('select')
+          .attr('class','select')
+        .on('change',onchange)
 var svgSelection = bodySelection.append("svg")
     .attr("width", 600)
     .attr("height", 750)
@@ -44,7 +49,19 @@ var sunSelection = svgSelection.append("circle")
     .attr("cy", sunYPosition)
     .attr("r", 30)
     .attr("style", "fill:" + "#e6e600");
-
+    
+var options = select
+      .selectAll('option')
+        .data(solarSystm).enter()
+        .append('option')
+            .text(function (d) { return d; });
+            
+function onchange() {
+        selectValue = d3.select('select').property('value')
+        d3.select('body')
+            .append('p')
+            .text(selectValue + ' is the last selected option.')
+    };
 
 //Appending planets to the body
 function buildPlanet(planet) {
@@ -55,8 +72,6 @@ function buildPlanet(planet) {
         .attr("fill", "none")
         .attr("id", planet.name);
     var planetSelection = svgSelection.append("circle")
-        .attr("cx", "")
-        .attr("cy", "")
         .attr("r", planet.radius)
         .attr("style", "fill:" + planet.color);
     var animationSelection = planetSelection.append("animateMotion")
@@ -64,7 +79,6 @@ function buildPlanet(planet) {
         .attr("repeatCount", "indefinite");
     var mPathSelection = animationSelection.append("mpath")
         .attr("xlink:href", "#"+planet.name);
-
 }
 
 function getPath(planet) {
