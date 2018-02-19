@@ -52,7 +52,7 @@ var planets = [{
     },
     {
         "name": "planet_7",
-        "radius": 14,
+        "radius": 12,
         "mass": 500,
         "orbitRadius": 210,
         "timeToComplete": "18s",
@@ -79,14 +79,8 @@ var options = select
         .data(solarSystm).enter()
         .append('option')
             .text(function (d) { return d; });
-            
-function onchange() {
-        selectValue = d3.select('select').property('value')
-        d3.select('body')
-            .append('p')
-            .text(selectValue + ' is the last selected option.')
-    };
 
+    
 //Appending planets to the body
 function buildPlanet(planet) {
     var orbitSelection = svgSelection.append("path")
@@ -97,7 +91,8 @@ function buildPlanet(planet) {
         .attr("id", planet.name);
     var planetSelection = svgSelection.append("circle")
         .attr("r", planet.radius)
-        .attr("style", "fill:" + planet.color);
+        .attr("style", "fill:" + "url(#gradient-" + planet.name + ")");
+        //Fill each circle/planet with its corresponding gradient
     var animationSelection = planetSelection.append("animateMotion")
         .attr("dur", planet.timeToComplete)
         .attr("repeatCount", "indefinite");
@@ -119,4 +114,29 @@ function buildSolarSystem() {
     });
 }
 
+
+//Gradient
+//Create a radial gradient for each of the planets
+var planetGradients = svgSelection.append("defs").selectAll("radialGradient")
+	.data(planets)
+	.enter().append("radialGradient")
+	.attr("id", function(d){ return "gradient-" + d.name; }) //unique id per planet
+	.attr("cx", "35%")	//Move the x-center location towards the left
+	.attr("cy", "35%")	//Move the y-center location towards the top
+	.attr("r", "60%");	//Increase the size of the "spread" of the gradient
+
+//Add colors to the gradient
+//First a lighter color in the center
+planetGradients.append("stop")
+	.attr("offset", "0%")
+	.attr("stop-color", function(d) { return d3.rgb(d.color).brighter(1); });
+//Then the actual color almost halfway
+planetGradients.append("stop")
+	.attr("offset", "50%")
+	.attr("stop-color", function(d) { return d.color; }); 
+//Finally a darker color at the outside
+planetGradients.append("stop")
+	.attr("offset",  "100%")
+	.attr("stop-color", function(d) { return d3.rgb(d.color).darker(1.75); });
 buildSolarSystem();
+
