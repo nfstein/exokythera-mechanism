@@ -175,7 +175,7 @@ function mouseOver(p){
     var planetName = p.style.fill.split("\"")[1].split("-")[1];
     var planet =  planets.filter(x=>x.name === planetName)
     var rect = svgSelection.append('rect').transition().duration(100).attr('width', 150)
-                .attr('height', 100)
+                .attr('height', 25)
                 .attr('x', 40)
                 .attr('y', 100)
                 .style('fill', 'white')
@@ -183,7 +183,7 @@ function mouseOver(p){
 var text = svgSelection.append('text').
                 text(planet[0].desc)
                 .attr('x', "40")
-                .attr('y', "122")
+                .attr('y', "120")
                 .attr('fill', 'black')
                 .attr('alignment-baseline',"right")
                 .attr("text-anchor","right")
