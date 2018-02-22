@@ -1,7 +1,6 @@
 //reading data csv
 const sunXPosition = 100;
 const sunYPosition = 100;
-var stars = ["Kepler-9", "Sun", "HD 10180", "Kepler-90", "Gliese 667 C", "HD 219134", "tau ceti", "HD 40307", "Gliese 581"];
 var systems = system_data;
 var bodySelection = d3.select("#home");
 var select = d3.select('#home')
