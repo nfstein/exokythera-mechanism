@@ -67,7 +67,7 @@ function buildSolarSystem() {
     planets.map((x, i) => {
         buildPlanet(x);
     });
-    addSun();
+    addSun(starName);
 }
 
 
@@ -103,13 +103,29 @@ function mouseOut(p) {
 }
 
 
-function addSun(starName) {
+function addSun(starN) {
+    var h1 = d3.select("div.w3-padding-large").append("h1")
+    .attr("class", "w3-center")
+    .text(starN);
+    var h5 = d3.select("div.w3-padding-large").append("h5")
+    .attr("class", "w3-center")
+    .text("Heading");
+    var p1 = d3.select("div.w3-padding-large").append("p")
+    .attr("class", "w3-large")
+    .text(systemDesc_1[0][starN]);
+    var p2 = d3.select("div.w3-padding-large").append("p")
+    .attr("class", "w3-large w3-hide-medium")
+    .text(systemDesc_2[0][starN]);
+    //filter all the planets for this sun
+    const indexOfStarName = system_headers.indexOf("HostStar")
+    const planets = system_data.filter(x => x[indexOfStarName] && x[indexOfStarName].toLowerCase() === starN.toLowerCase());
     var sunSelection = svgSelection.append("circle")
         .attr("cx", sunXPosition)
         .attr("cy", sunYPosition)
         .attr("r", 30)
         .attr("style", "fill:" + "url(#radial-gradient)")
         .on("click", function () {
+
             var h1 = d3.select("div.w3-col m6 w3-padding-large").append("h1")
                 .attr("class", "w3-center")
                 .text(star);
@@ -118,10 +134,10 @@ function addSun(starName) {
                 .text("Heading");
             var p1 = d3.select("div.w3-col m6 w3-padding-large").append("p")
                 .attr("class", "w3-large")
-                .text(systemDesc_1[starName]);
+                .text(systemDesc_1[0][starN]);
             var p2 = d3.select("w3-large w3-hide-medium").append("p")
                 .attr("class", "w3-large w3-hide-medium")
-                .attr(systemDesc_2[starName]);
+                .attr(systemDesc_2[0][starN]);
         });
 }
 
@@ -220,5 +236,8 @@ function cleanSvg() {
     d3.selectAll("circle").data([]).exit().remove();
     d3.selectAll("rect").data([]).exit().remove();
     d3.selectAll("text").data([]).exit().remove();
+    d3.selectAll("h1").data([]).exit().remove();
+    d3.selectAll("h5").data([]).exit().remove();
+    d3.selectAll("p").data([]).exit().remove();
 }
 buildSolarSystem();
