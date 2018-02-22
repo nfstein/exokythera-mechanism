@@ -28,7 +28,7 @@ function buildPlanet(planet) {
     var orbitSelection = svgSelection.append("path")
         .attr("d", getPath(planet))
         .attr("stroke", "lightgrey")
-        .attr("stroke-width", "2")
+        .attr("stroke-width", "1")
         .attr("fill", "none")
         .attr("id", planet[0])
         .on("mouseover", function () {
@@ -38,7 +38,7 @@ function buildPlanet(planet) {
             mouseOut(this);
         });
     var planetSelection = svgSelection.append("circle")
-        .attr("r", planet[11] * 20)
+        .attr("r", planet[11] * 200)
         .attr("style", "fill:" + "url(#gradient-" + planet[0] + ")")
     //Fill each circle/planet with its corresponding gradient
     var animationSelection = planetSelection.append("animateMotion")
@@ -67,7 +67,7 @@ function buildSolarSystem() {
     planets.map((x, i) => {
         buildPlanet(x);
     });
-    //addSun();
+    addSun();
 }
 
 
@@ -146,7 +146,7 @@ function getGradient() {
     habitabilityScore.sort(compare);
     var colors = []
     habitabilityScore.map((x, i) => {
-        colors.push(d3.interpolateSpectral((i + Number.parseInt(i)) / habitabilityScore.length));
+        colors.push(d3.interpolateSpectral((i + Number.parseInt(1)) / habitabilityScore.length));
     })
     habitabilityScore.map((x, i) => {
         x["color"] = colors[i];
@@ -207,9 +207,9 @@ function getGradient() {
 
 
 function compare(a, b) {
-    if (a["habitability"] < b["habitability"])
-        return -1;
     if (a["habitability"] > b["habitability"])
+        return -1;
+    if (a["habitability"] < b["habitability"])
         return 1;
     return 0;
 }
