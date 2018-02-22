@@ -1,86 +1,26 @@
+//reading data csv
 const sunXPosition = 100;
 const sunYPosition = 100;
-var solarSystm = ["Trappist-1", "Sun", "Alpha Centauri"];
-
-var planets = [{
-    "name": "planet_1",
-    "radius": 5,
-    "mass": 100,
-    "orbitRadius": 80,
-    "timeToComplete": "20s",
-    "color": "red",
-    "desc":"TRAPPIST-1b"
-},
-{
-    "name": "planet_2",
-    "radius": 8,
-    "mass": 400,
-    "orbitRadius": 100,
-    "timeToComplete": "22s",
-    "color": "orange",
-    "desc":"TRAPPIST-1c"
-},
-{
-    "name": "planet_3",
-    "radius": 10,
-    "mass": 500,
-    "orbitRadius": 120,
-    "timeToComplete": "28s",
-    "color": "green",
-    "desc":"TRAPPIST-1d"
-},
-{
-    "name": "planet_4",
-    "radius": 15,
-    "mass": 500,
-    "orbitRadius": 150,
-    "timeToComplete": "23s",
-    "color": "#aa3382",
-    "desc":"TRAPPIST-1e"
-},
-{
-    "name": "planet_5",
-    "radius": 18,
-    "mass": 500,
-    "orbitRadius": 180,
-    "timeToComplete": "32s",
-    "color": "#1c266b",
-    "desc":"TRAPPIST-1f"
-},
-{
-    "name": "planet_6",
-    "radius": 32,
-    "mass": 500,
-    "orbitRadius": 250,
-    "timeToComplete": "24s",
-    "color": "#af160e",
-    "desc":"TRAPPIST-1g"
-},
-{
-    "name": "planet_7",
-    "radius": 12,
-    "mass": 500,
-    "orbitRadius": 210,
-    "timeToComplete": "28s",
-    "color": "#067f82",
-    "desc":"TRAPPIST-1h"
-}
-];
+var stars = ["Kepler-9", "Sun", "HD 10180", "Kepler-90", "Gliese 667", "HR-8832", "tau ceti", "HD 40307", "Gliese 581"];
+var systems = system_data;
 var bodySelection = d3.select("#home");
 var select = d3.select('#home')
     .append('select')
     .attr('class', 'select')
+    .attr('id', "stars")
     .on('change', onchange)
 var svgSelection = bodySelection.append("svg")
-    .attr("width", 600)
-    .attr("height", 750)
+    .attr("width", 800)
+    .attr("height", 900)
     .attr("style", "padding: 14em");
 
 var options = select
     .selectAll('option')
-    .data(solarSystm).enter()
+    .data(stars).enter()
     .append('option')
-    .text(function (d) { return d; });
+    .text(function (d) {
+        return d;
+    });
 
 
 //Appending planets to the body
@@ -90,113 +30,195 @@ function buildPlanet(planet) {
         .attr("stroke", "lightgrey")
         .attr("stroke-width", "2")
         .attr("fill", "none")
-        .attr("id", planet.name);
+        .attr("id", planet[0])
+        .on("mouseover", function () {
+            mouseOver(this);
+        })
+        .on("mouseout", function () {
+            mouseOut(this);
+        });
     var planetSelection = svgSelection.append("circle")
-        .attr("r", planet.radius)
-        .attr("style", "fill:" + "url(#gradient-" + planet.name + ")")
-        .attr("onmouseover", "mouseOver(this)")
-        .attr("onmouseout","mouseOut(this)")
+        .attr("r", planet[11] * 20)
+        .attr("style", "fill:" + "url(#gradient-" + planet[0] + ")")
     //Fill each circle/planet with its corresponding gradient
     var animationSelection = planetSelection.append("animateMotion")
-        .attr("dur", planet.timeToComplete)
+        .attr("dur", planet[9])
         .attr("repeatCount", "indefinite");
     var mPathSelection = animationSelection.append("mpath")
-        .attr("xlink:href", "#" + planet.name);
+        .attr("xlink:href", "#" + planet[0]);
     //Adding callbacks
-
-
 }
 
 function getPath(planet) {
+    var scaledOrditRadius = (planet[12] * 400);
     var dFormula = "M " + sunXPosition + " " + sunYPosition +
-        " m " + -planet.orbitRadius + ", 0" +
-        " a " + planet.orbitRadius + "," + planet.orbitRadius + " 0 1,0 " + planet.orbitRadius * 2 + ",0" +
-        " a " + planet.orbitRadius + "," + planet.orbitRadius + " 0 1,0 " + -planet.orbitRadius * 2 + ",0";
+        " m " + -scaledOrditRadius + ", 0" +
+        " a " + scaledOrditRadius + "," + scaledOrditRadius + " 0 1,0 " + scaledOrditRadius * 2 + ",0" +
+        " a " + scaledOrditRadius + "," + scaledOrditRadius + " 0 1,0 " + -scaledOrditRadius * 2 + ",0";
     return dFormula;
 }
 
 function buildSolarSystem() {
-    planets.forEach(function (planet) {
-        buildPlanet(planet);
+    const planetClrAttributes = getGradient();
+    const starName = document.getElementById("stars").value;
+    //filter all the planets for this sun
+    const indexOfStarName = system_headers.indexOf("HostStar")
+    const planets = system_data.filter(x => x[indexOfStarName] && x[indexOfStarName].toLowerCase() === starName.toLowerCase());
+    planets.map((x, i) => {
+        buildPlanet(x);
     });
+    //addSun();
 }
 
 
-//Gradient
-//Create a radial gradient for each of the planets
-var planetGradients = svgSelection.append("defs").selectAll("radialGradient")
-    .data(planets)
-    .enter().append("radialGradient")
-    .attr("id", function (d) { return "gradient-" + d.name; }) //unique id per planet
-    .attr("cx", "35%")	//Move the x-center location towards the left
-    .attr("cy", "35%")	//Move the y-center location towards the top
-    .attr("r", "60%");	//Increase the size of the "spread" of the gradient
 
-//Add colors to the gradient
-//First a lighter color in the center
-planetGradients.append("stop")
-    .attr("offset", "0%")
-    .attr("stop-color", function (d) { return d3.rgb(d.color).brighter(1); });
-//Then the actual color almost halfway
-planetGradients.append("stop")
-    .attr("offset", "50%")
-    .attr("stop-color", function (d) { return d.color; });
-//Finally a darker color at the outside
-planetGradients.append("stop")
-    .attr("offset", "100%")
-    .attr("stop-color", function (d) { return d3.rgb(d.color).darker(1.75); });
-
-
-//Append a radialGradient element to the defs and give it a unique id
-var radialGradient = d3.select("defs").append("radialGradient")
-    .attr("id", "radial-gradient")
-    .attr("cx", "50%")    //The x-center of the gradient, same as a typical SVG circle
-    .attr("cy", "50%")    //The y-center of the gradient
-    .attr("r", "50%");
-//Add colors to make the gradient appear like a Sun
-radialGradient.append("stop")
-    .attr("offset", "0%")
-    .attr("stop-color", "#FFF76B");
-radialGradient.append("stop")
-    .attr("offset", "50%")
-    .attr("stop-color", "#FFF845");
-radialGradient.append("stop")
-    .attr("offset", "90%")
-    .attr("stop-color", "#FFDA4E");
-radialGradient.append("stop")
-    .attr("offset", "100%")
-    .attr("stop-color", "#FB8933");
-var sunSelection = svgSelection.append("circle")
-    .attr("cx", sunXPosition)
-    .attr("cy", sunYPosition)
-    .attr("r", 30)
-    .attr("style", "fill:" + "url(#radial-gradient)");
-function mouseOver(p){
-    var planetName = p.style.fill.split("\"")[1].split("-")[1];
-    var planet =  planets.filter(x=>x.name === planetName)
+function mouseOver(p) {
+    const starName = document.getElementById("stars").value;
+    //filter all the planets for this sun
+    const indexOfStarName = system_headers.indexOf("HostStar")
+    const planets = system_data.filter(x => x[indexOfStarName] && x[indexOfStarName].toLowerCase() === starName.toLowerCase());
+    var planetName = p.id;
+    var planet = planets.filter(x => x[0] && x[0].toLowerCase() === planetName.toLowerCase())
     var rect = svgSelection.append('rect').transition().duration(100).attr('width', 150)
-                .attr('height', 25)
-                .attr('x', 40)
-                .attr('y', 100)
-                .style('fill', 'white')
-                .attr('stroke', planet[0].color)
-var text = svgSelection.append('text').
-                text(planet[0].desc)
-                .attr('x', "40")
-                .attr('y', "120")
-                .attr('fill', 'black')
-                .attr('alignment-baseline',"right")
-                .attr("text-anchor","right")
-                .attr("font-family","sans-serif")
-                .attr("font","10")
-                .attr("class","wrap")
+        .attr('height', 25)
+        .attr('x', 40)
+        .attr('y', 100)
+        .style('fill', 'white')
+        .attr('stroke', planet[0].color)
+    var text = svgSelection.append('text').
+    text(planet[0].desc)
+        .attr('x', "40")
+        .attr('y', "120")
+        .attr('fill', 'black')
+        .attr('alignment-baseline', "right")
+        .attr("text-anchor", "right")
+        .attr("font-family", "sans-serif")
+        .attr("font", "10")
+        .attr("class", "wrap")
 }
 
-function mouseOut(p){
+function mouseOut(p) {
     d3.selectAll("rect").data([]).exit().remove();
     d3.selectAll("text").data([]).exit().remove();
 }
 
+
+function addSun(starName) {
+    var sunSelection = svgSelection.append("circle")
+        .attr("cx", sunXPosition)
+        .attr("cy", sunYPosition)
+        .attr("r", 30)
+        .attr("style", "fill:" + "url(#radial-gradient)")
+        .on("click", function () {
+            var h1 = d3.select("div.w3-col m6 w3-padding-large").append("h1")
+                .attr("class", "w3-center")
+                .text(star);
+            var h5 = d3.select("div.w3-col m6 w3-padding-large").append("h5")
+                .attr("class", "w3-center")
+                .text("Heading");
+            var p1 = d3.select("div.w3-col m6 w3-padding-large").append("p")
+                .attr("class", "w3-large")
+                .text(systemDesc_1[starName]);
+            var p2 = d3.select("w3-large w3-hide-medium").append("p")
+                .attr("class", "w3-large w3-hide-medium")
+                .attr(systemDesc_2[starName]);
+        });
+}
+
+function onchange() {
+    cleanSvg();
+    buildSolarSystem();
+}
+
+function getGradient() {
+    const starName = document.getElementById("stars").value;
+    //filter all the planets for this sun
+    const indexOfStarName = system_headers.indexOf("HostStar")
+    const planets = system_data.filter(x => x[indexOfStarName] && x[indexOfStarName].toLowerCase() === starName.toLowerCase());
+    var habitabilityScore = [];
+    planets.map(x => {
+        habitabilityScore.push({
+            "name": x[0],
+            "habitability": (((Number.parseFloat(x[17]) + Number.parseFloat(x[18])) / 2) - Number.parseFloat(x[12])) > 0 ?
+                (((Number.parseFloat(x[17]) + Number.parseFloat(x[18])) / 2) - Number.parseFloat(x[12])) : -1 * (((Number.parseFloat(x[17]) + Number.parseFloat(x[18])) / 2) - Number.parseFloat(x[12]))
+        });
+    });
+    habitabilityScore.sort(compare);
+    var colors = []
+    habitabilityScore.map((x, i) => {
+        colors.push(d3.interpolateSpectral((i + Number.parseInt(i)) / habitabilityScore.length));
+    })
+    habitabilityScore.map((x, i) => {
+        x["color"] = colors[i];
+    });
+
+    //Create a radial gradient for each of the planets
+    var planetGradients = svgSelection.append("defs").selectAll("radialGradient")
+        .data(habitabilityScore)
+        .enter().append("radialGradient")
+        .attr("id", function (d) {
+            return "gradient-" + d.name;
+        }) //unique id per planet
+        .attr("cx", "35%") //Move the x-center location towards the left
+        .attr("cy", "35%") //Move the y-center location towards the top
+        .attr("r", "60%"); //Increase the size of the "spread" of the gradient
+
+    //Add colors to the gradient
+    //First a lighter color in the center
+    planetGradients.append("stop")
+        .attr("offset", "0%")
+        .attr("stop-color", function (d) {
+            return d3.rgb(d.color).brighter(1);
+        });
+    //Then the actual color almost halfway
+    planetGradients.append("stop")
+        .attr("offset", "50%")
+        .attr("stop-color", function (d) {
+            return d.color;
+        });
+    //Finally a darker color at the outside
+    planetGradients.append("stop")
+        .attr("offset", "100%")
+        .attr("stop-color", function (d) {
+            return d3.rgb(d.color).darker(1.75);
+        });
+
+    //Append a radialGradient element to the defs and give it a unique id
+    var radialGradient = d3.select("defs").append("radialGradient")
+        .attr("id", "radial-gradient")
+        .attr("cx", "50%") //The x-center of the gradient, same as a typical SVG circle
+        .attr("cy", "50%") //The y-center of the gradient
+        .attr("r", "50%");
+    //Add colors to make the gradient appear like a Sun
+    radialGradient.append("stop")
+        .attr("offset", "0%")
+        .attr("stop-color", "#FFF76B");
+    radialGradient.append("stop")
+        .attr("offset", "50%")
+        .attr("stop-color", "#FFF845");
+    radialGradient.append("stop")
+        .attr("offset", "90%")
+        .attr("stop-color", "#FFDA4E");
+    radialGradient.append("stop")
+        .attr("offset", "100%")
+        .attr("stop-color", "#FB8933");
+    return habitabilityScore;
+}
+
+
+function compare(a, b) {
+    if (a["habitability"] < b["habitability"])
+        return -1;
+    if (a["habitability"] > b["habitability"])
+        return 1;
+    return 0;
+}
+
+function cleanSvg() {
+    d3.selectAll("defs").data([]).exit().remove();
+    d3.selectAll("path").data([]).exit().remove();
+    d3.selectAll("circle").data([]).exit().remove();
+    d3.selectAll("rect").data([]).exit().remove();
+    d3.selectAll("text").data([]).exit().remove();
+}
 buildSolarSystem();
-
-
