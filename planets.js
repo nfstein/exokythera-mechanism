@@ -1,7 +1,7 @@
 //reading data csv
 const sunXPosition = 100;
 const sunYPosition = 100;
-var stars = ["Kepler-9", "Sun", "HD 10180", "Kepler-90", "Gliese 667", "HR-8832", "tau ceti", "HD 40307", "Gliese 581"];
+var stars = ["Kepler-9", "Sun", "HD 10180", "Kepler-90", "Gliese 667", "HD 219134", "tau ceti", "HD 40307", "Gliese 581"];
 var systems = system_data;
 var bodySelection = d3.select("#home");
 var select = d3.select('#home')
@@ -10,8 +10,8 @@ var select = d3.select('#home')
     .attr('id', "stars")
     .on('change', onchange)
 var svgSelection = bodySelection.append("svg")
-    .attr("width", 800)
-    .attr("height", 900)
+    .attr("width", 600)
+    .attr("height", 600)
     .attr("style", "padding: 14em");
 
 var options = select
@@ -38,11 +38,11 @@ function buildPlanet(planet) {
             mouseOut(this);
         });
     var planetSelection = svgSelection.append("circle")
-        .attr("r", planet[11] * 200)
+        .attr("r", Number.parseFloat(planet[11] ? planet[11] : 0.0) + Number.parseInt(10))
         .attr("style", "fill:" + "url(#gradient-" + planet[0] + ")")
     //Fill each circle/planet with its corresponding gradient
     var animationSelection = planetSelection.append("animateMotion")
-        .attr("dur", planet[9])
+        .attr("dur", Number.parseFloat(planet[9] ? planet[9]  : 0.0)/2)
         .attr("repeatCount", "indefinite");
     var mPathSelection = animationSelection.append("mpath")
         .attr("xlink:href", "#" + planet[0]);
@@ -50,7 +50,7 @@ function buildPlanet(planet) {
 }
 
 function getPath(planet) {
-    var scaledOrditRadius = (planet[12] * 400);
+    var scaledOrditRadius = ((Number.parseFloat(planet[12] ? planet[12] : 0.0)*5 + Number.parseInt(50)));
     var dFormula = "M " + sunXPosition + " " + sunYPosition +
         " m " + -scaledOrditRadius + ", 0" +
         " a " + scaledOrditRadius + "," + scaledOrditRadius + " 0 1,0 " + scaledOrditRadius * 2 + ",0" +
@@ -122,10 +122,9 @@ function addSun(starN) {
     var sunSelection = svgSelection.append("circle")
         .attr("cx", sunXPosition)
         .attr("cy", sunYPosition)
-        .attr("r", 30)
+        .attr("r", Number.parseFloat(planets[0][6] ? planets[0][6] : 0.0)+Number.parseInt(10))
         .attr("style", "fill:" + "url(#radial-gradient)")
         .on("click", function () {
-
             var h1 = d3.select("div.w3-col m6 w3-padding-large").append("h1")
                 .attr("class", "w3-center")
                 .text(star);
@@ -156,7 +155,7 @@ function getGradient() {
         habitabilityScore.push({
             "name": x[0],
             "habitability": (((Number.parseFloat(x[17]) + Number.parseFloat(x[18])) / 2) - Number.parseFloat(x[12])) > 0 ?
-                (((Number.parseFloat(x[17]) + Number.parseFloat(x[18])) / 2) - Number.parseFloat(x[12])) : -1 * (((Number.parseFloat(x[17]) + Number.parseFloat(x[18])) / 2) - Number.parseFloat(x[12]))
+                (((Number.parseFloat(x[17]) + Number.parseFloat(x[18] ? x[18]  : 0.0)) / 2) - Number.parseFloat(x[12] ? x[12] : 0.0)) : -1 * (((Number.parseFloat(x[17] ? x[17] : 0.0) + Number.parseFloat(x[18] ? x[18] : 0.0)) / 2) - Number.parseFloat(x[12] ? x[12] : 0.0))
         });
     });
     habitabilityScore.sort(compare);
