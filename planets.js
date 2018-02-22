@@ -1,7 +1,7 @@
 //reading data csv
 const sunXPosition = 100;
 const sunYPosition = 100;
-var stars = ["Kepler-9", "Sun", "HD 10180", "Kepler-90", "Gliese 667", "HD 219134", "tau ceti", "HD 40307", "Gliese 581"];
+var stars = ["Kepler-9", "Sun", "HD 10180", "Kepler-90", "Gliese 667 C", "HD 219134", "tau ceti", "HD 40307", "Gliese 581"];
 var systems = system_data;
 var bodySelection = d3.select("#home");
 var select = d3.select('#home')
@@ -49,14 +49,7 @@ function buildPlanet(planet) {
     //Adding callbacks
 }
 
-function getPath(planet) {
-    var scaledOrditRadius = ((Number.parseFloat(planet[12] ? planet[12] : 0.0)*5 + Number.parseInt(50)));
-    var dFormula = "M " + sunXPosition + " " + sunYPosition +
-        " m " + -scaledOrditRadius + ", 0" +
-        " a " + scaledOrditRadius + "," + scaledOrditRadius + " 0 1,0 " + scaledOrditRadius * 2 + ",0" +
-        " a " + scaledOrditRadius + "," + scaledOrditRadius + " 0 1,0 " + -scaledOrditRadius * 2 + ",0";
-    return dFormula;
-}
+
 
 function buildSolarSystem() {
     const planetClrAttributes = getGradient();
@@ -221,22 +214,5 @@ function getGradient() {
 }
 
 
-function compare(a, b) {
-    if (a["habitability"] > b["habitability"])
-        return -1;
-    if (a["habitability"] < b["habitability"])
-        return 1;
-    return 0;
-}
 
-function cleanSvg() {
-    d3.selectAll("defs").data([]).exit().remove();
-    d3.selectAll("path").data([]).exit().remove();
-    d3.selectAll("circle").data([]).exit().remove();
-    d3.selectAll("rect").data([]).exit().remove();
-    d3.selectAll("text").data([]).exit().remove();
-    d3.selectAll("h1").data([]).exit().remove();
-    d3.selectAll("h5").data([]).exit().remove();
-    d3.selectAll("p").data([]).exit().remove();
-}
 buildSolarSystem();
