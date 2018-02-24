@@ -1,4 +1,6 @@
-const stars = ["Kepler-9", "Sun", "HD 10180", "Kepler-90", "Gliese 667 C", "HD 219134", "tau ceti", "HD 40307", "Gliese 581"];
+const stars = ["Kepler-90", "Sun", "HD 10180", "Kepler-9", "Gliese 667 C", "HD 219134", "tau ceti", "HD 40307", "Gliese 581"];
+//const stars = test.list
+
 const system_headers = [
     "PlanetIdentifier",
     "DiscoveryMethod",

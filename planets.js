@@ -1,19 +1,22 @@
 //reading data csv
 const sunXPosition = 100;
 const sunYPosition = 100;
+const windowWidth = 600;
+const windowHeight = 600;
+
 var systems = system_data;
-var bodySelection = d3.select("#home");
-var select = d3.select('#home')
+var  $bodySelection = d3.select("#home");
+var $select = d3.select('#home')
     .append('select')
     .attr('class', 'select')
     .attr('id', "stars")
     .on('change', onchange)
-var svgSelection = bodySelection.append("svg")
-    .attr("width", 600)
-    .attr("height", 600)
+var svgSelection =  $bodySelection.append("svg")
+    .attr("width", windowWidth)
+    .attr("height", windowHeight)
     .attr("style", "padding: 14em");
 
-var options = select
+var options = $select
     .selectAll('option')
     .data(stars).enter()
     .append('option')
@@ -23,7 +26,7 @@ var options = select
 
 
 //Appending planets to the body
-function buildPlanet(planet) {
+/*function buildPlanet(planet) {
     var orbitSelection = svgSelection.append("path")
         .attr("d", getPath(planet))
         .attr("stroke", "lightgrey")
@@ -46,6 +49,35 @@ function buildPlanet(planet) {
     var mPathSelection = animationSelection.append("mpath")
         .attr("xlink:href", "#" + planet[0]);
     //Adding callbacks
+}*/
+
+function buildPlanet(planet, scaleFactor, timeFactor) {
+    console.log(planet)
+    var randAngle = Math.random()*2*3.14
+    var orbitalRadius = planet[system_headers.indexOf("SemiMajorAxisAU")]
+    console.log(orbitalRadius)
+    var cx = orbitalRadius * scaleFactor*Math.sin(randAngle) + sunXPosition
+    var cy = orbitalRadius * scaleFactor*Math.cos(randAngle) + sunYPosition
+    var animationHTML = `<animateTransform attributeName="transform"
+            type="rotate"
+            from="360 ${sunXPosition} ${sunYPosition}" to="0 ${sunXPosition} ${sunYPosition}"
+            begin="0s" dur="${planet[9]*timeFactor}s"
+            repeatCount="indefinite"
+        />`
+    var $orbitSelection = svgSelection.append("path")
+        .attr("d", getPath(orbitalRadius * scaleFactor))
+        .attr("stroke", "lightgrey")
+        .attr("stroke-width", "2")
+        .attr("fill", "none")
+        .attr("id", planet[0]);
+    planetRadius = planet[system_headers.indexOf("RadiusJpt")]
+    console.log(planet[0], 'size - ', planetRadius)
+    var $planetSelection = svgSelection.append("circle")
+        .attr("r", ((planetRadius)**.5 * 20)) 
+        .attr("cx", cx)
+        .attr("cy", cy)
+        .attr("style", "fill:" + "url(#gradient-" + planet[0] + ")")
+        .html(animationHTML)
 }
 
 
@@ -53,13 +85,80 @@ function buildPlanet(planet) {
 function buildSolarSystem() {
     const planetClrAttributes = getGradient();
     const starName = document.getElementById("stars").value;
+    console.log(test[starName])
     //filter all the planets for this sun
     const indexOfStarName = system_headers.indexOf("HostStar")
     const planets = system_data.filter(x => x[indexOfStarName] && x[indexOfStarName].toLowerCase() === starName.toLowerCase());
+
+    console.log(planets)
+
+    var scaleFactor = getScaleFactor(planets, windowWidth)
+    var timeFactor = getTimeFactor(planets, 1)
+    console.log('scaleFactor = ', scaleFactor)
+    console.log('timeFactor = ', timeFactor)
+    addExtraOrbits(planets[0], scaleFactor)
     planets.map((x, i) => {
-        buildPlanet(x);
+        buildPlanet(x, scaleFactor, timeFactor);
     });
+    
     addSun(starName);
+}
+
+function addExtraOrbits(planet, scaleFactor) {
+    var earthOrbit = svgSelection.append("path")
+        .attr("d", getPath(1 * scaleFactor))
+        .attr("stroke", "blue")
+        .attr("stroke-width", "2")
+        .attr("fill", "none")
+        .attr("id", '1AU');
+    var lilHabitable = svgSelection.append("path")
+        .attr("d", getPath(planet[system_headers.indexOf("HostStarInnerHabitabilityAU")] * scaleFactor))
+        .attr("stroke", "green")
+        .attr("stroke-width", "2")
+        .attr("fill", "none")
+        .attr("id", 'innerHabitable');
+    var lilHabitable = svgSelection.append("path")
+        .attr("d", getPath(planet[system_headers.indexOf("HostStarOuterHabitabilityAU")] * scaleFactor))
+        .attr("stroke", "green")
+        .attr("stroke-width", "2")
+        .attr("fill", "none")
+        .attr("id", 'outerHabitable');
+}
+
+function getTimeFactor(planets, modifier) {
+    //slowest orbit completes in 10 seconds
+    var minTime;
+    planets.forEach(planet => {
+        var time = Number.parseFloat(planet[9])
+        if (!minTime) {
+            minTime = time
+        }
+        if (time < minTime) {
+            minTime = time
+        }
+    })
+    //slowest orbit completes in 3 seconds
+    console.log('minTime = ', minTime)
+    return (3/minTime)*modifier;
+}
+
+//loop through planets to find max orbit -> .5*windowSize/max orbit or 1AU is window size
+function getScaleFactor(planets, width) {
+    console.log(planets);
+    maxOrbit = 1 //accounts for AU for scale
+    planets.forEach(planet => {
+        var orbit = Number.parseFloat(planet[system_headers.indexOf('SemiMajorAxisAU')])
+        console.log(orbit)
+        console.log(maxOrbit)
+        if (orbit > maxOrbit){
+            maxOrbit = orbit
+        }
+    })
+
+    console.log('maxOrbit = ', maxOrbit)
+
+    return (width/2)/maxOrbit;
+
 }
 
 
@@ -96,16 +195,16 @@ function mouseOut(p) {
 
 
 function addSun(starN) {
-    var h1 = d3.select("div.w3-padding-large").append("h1")
+    var $h1 = d3.select("div.w3-padding-large").append("h1")
     .attr("class", "w3-center")
     .text(starN);
-    var h5 = d3.select("div.w3-padding-large").append("h5")
+    var  $h5 = d3.select("div.w3-padding-large").append("h5")
     .attr("class", "w3-center")
     .text("Heading");
-    var p1 = d3.select("div.w3-padding-large").append("p")
+    var $p1 = d3.select("div.w3-padding-large").append("p")
     .attr("class", "w3-large")
     .text(systemDesc_1[0][starN]);
-    var p2 = d3.select("div.w3-padding-large").append("p")
+    var $p2 = d3.select("div.w3-padding-large").append("p")
     .attr("class", "w3-large w3-hide-medium")
     .text(systemDesc_2[0][starN]);
     //filter all the planets for this sun
@@ -117,16 +216,16 @@ function addSun(starN) {
         .attr("r", Number.parseFloat(planets[0][6] ? planets[0][6] : 0.0)+Number.parseInt(10))
         .attr("style", "fill:" + "url(#radial-gradient)")
         .on("click", function () {
-            var h1 = d3.select("div.w3-col m6 w3-padding-large").append("h1")
+            var $h1 = d3.select("div.w3-col m6 w3-padding-large").append("h1")
                 .attr("class", "w3-center")
                 .text(star);
-            var h5 = d3.select("div.w3-col m6 w3-padding-large").append("h5")
+            var $h5 = d3.select("div.w3-col m6 w3-padding-large").append("h5")
                 .attr("class", "w3-center")
                 .text("Heading");
-            var p1 = d3.select("div.w3-col m6 w3-padding-large").append("p")
+            var $p1 = d3.select("div.w3-col m6 w3-padding-large").append("p")
                 .attr("class", "w3-large")
                 .text(systemDesc_1[0][starN]);
-            var p2 = d3.select("w3-large w3-hide-medium").append("p")
+            var $p2 = d3.select("w3-large w3-hide-medium").append("p")
                 .attr("class", "w3-large w3-hide-medium")
                 .attr(systemDesc_2[0][starN]);
         });
@@ -190,23 +289,23 @@ function getGradient() {
             return d3.rgb(d.color).darker(1.75);
         });
 
-    //Append a radialGradient element to the defs and give it a unique id
-    var radialGradient = d3.select("defs").append("radialGradient")
+    //Append a $radialGradient element to the defs and give it a unique id
+    var $radialGradient = d3.select("defs").append("radialGradient")
         .attr("id", "radial-gradient")
         .attr("cx", "50%") //The x-center of the gradient, same as a typical SVG circle
         .attr("cy", "50%") //The y-center of the gradient
         .attr("r", "50%");
     //Add colors to make the gradient appear like a Sun
-    radialGradient.append("stop")
+    $radialGradient.append("stop")
         .attr("offset", "0%")
         .attr("stop-color", "#FFF76B");
-    radialGradient.append("stop")
+    $radialGradient.append("stop")
         .attr("offset", "50%")
         .attr("stop-color", "#FFF845");
-    radialGradient.append("stop")
+    $radialGradient.append("stop")
         .attr("offset", "90%")
         .attr("stop-color", "#FFDA4E");
-    radialGradient.append("stop")
+    $radialGradient.append("stop")
         .attr("offset", "100%")
         .attr("stop-color", "#FB8933");
     return habitabilityScore;
