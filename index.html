@@ -14,6 +14,7 @@
     <script src="util.js"></script>
     <script src="data.js"></script>
     <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <style>
         body {
             font-family: "Times New Roman", Georgia, Serif;
@@ -39,9 +40,14 @@
         <div class="w3-col m6 w3-padding-large">
             <br/>
         </div>
+        <div class="icon-bar"> 
+                <a class="active" href="javascript:menuBarHandler(hm);" id="hm"><i class="fa fa-home"></i></a> 
+                <a href="javascript:menuBarHandler(chart);" id="chart"><i class="fa fa-bar-chart"></i></a> 
+                <a href="javascript:menuBarHandler(comments);" id="comments"><i class="fa fa-comments-o"></i></a>
+                <a href="javascript:menuBarHandler(fb);" id="fb"><i class="fa fa-facebook"></i></a>
+        </div>
         <div class="w3-col m6 w3-padding-small w3-hide-small" id="home">
             <script src="planets.js"></script>
-
         </div>
     </div>
 

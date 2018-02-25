@@ -24,3 +24,10 @@ function cleanSvg() {
     d3.selectAll("h5").data([]).exit().remove();
     d3.selectAll("p").data([]).exit().remove();
 }
+
+function menuBarHandler(event){ 
+     var previousMenu = d3.selectAll("a")
+                        .attr("class","");
+     var currentSelection = d3.select(event)
+                            .attr("class","active");                   
+}
