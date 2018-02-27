@@ -1,6 +1,8 @@
 //reading data csv
 const sunXPosition = 100;
 const sunYPosition = 100;
+const svgWidth = 600;
+const svgHeight = 600;
 var systems = system_data;
 var bodySelection = d3.select("#home");
 var select = d3.select('#home')
@@ -9,8 +11,8 @@ var select = d3.select('#home')
     .attr('id', "stars")
     .on('change', onchange)
 var svgSelection = bodySelection.append("svg")
-    .attr("width", 600)
-    .attr("height", 600)
+    .attr("width", svgWidth)
+    .attr("height", svgHeight)
     .attr("style", "padding: 14em");
 
 var options = select
@@ -23,9 +25,9 @@ var options = select
 
 
 //Appending planets to the body
-function buildPlanet(planet) {
+function buildPlanet(planet, scaleFactor) {
     var orbitSelection = svgSelection.append("path")
-        .attr("d", getPath(planet))
+        .attr("d", getPath(planet, scaleFactor))
         .attr("stroke", "lightgrey")
         .attr("stroke-width", "1")
         .attr("fill", "none")
@@ -56,12 +58,19 @@ function buildSolarSystem() {
     //filter all the planets for this sun
     const indexOfStarName = system_headers.indexOf("HostStar")
     const planets = system_data.filter(x => x[indexOfStarName] && x[indexOfStarName].toLowerCase() === starName.toLowerCase());
+    const maxRadius = d3.max(planets,function(d){
+                         return d[12];
+    });
+    const logOfMaxRadius =  Math.log(Number.parseFloat(maxRadius)*10)*100;
+    var scaleFactor = 0.0;
+    if(logOfMaxRadius>=d3.max([svgHeight,svgWidth])/2){
+        scaleFactor = (d3.max([svgHeight,svgWidth])-100)/2;
+    }
     planets.map((x, i) => {
-        buildPlanet(x);
+        buildPlanet(x, scaleFactor);
     });
     addSun(starName);
 }
-
 
 
 function mouseOver(p) {
@@ -96,18 +105,30 @@ function mouseOut(p) {
 
 
 function addSun(starN) {
-    var h1 = d3.select("div.w3-padding-large").append("h1")
-    .attr("class", "w3-center")
-    .text(starN);
-    var h5 = d3.select("div.w3-padding-large").append("h5")
-    .attr("class", "w3-center")
-    .text("Heading");
-    var p1 = d3.select("div.w3-padding-large").append("p")
-    .attr("class", "w3-large")
-    .text(systemDesc_1[0][starN]);
-    var p2 = d3.select("div.w3-padding-large").append("p")
-    .attr("class", "w3-large w3-hide-medium")
-    .text(systemDesc_2[0][starN]);
+    switch(menuSelected){
+        case "desc":
+        var h1 = d3.select("div.w3-padding-large").append("h1")
+        .attr("class", "w3-center")
+        .text(starN);
+        var h5 = d3.select("div.w3-padding-large").append("h5")
+        .attr("class", "w3-center")
+        .text("Heading");
+        var p1 = d3.select("div.w3-padding-large").append("p")
+        .attr("class", "w3-large")
+        .text(systemDesc_1[0][starN]);
+        var p2 = d3.select("div.w3-padding-large").append("p")
+        .attr("class", "w3-large w3-hide-medium")
+        .text(systemDesc_2[0][starN]);
+        break;
+        case "charts":
+        var chartsDiv = d3.select("div#charts").append("h1")
+                        .attr("class","w3-center")
+                        .text("sample charts");
+        break;
+        default:
+          break;
+    }
+
     //filter all the planets for this sun
     const indexOfStarName = system_headers.indexOf("HostStar")
     const planets = system_data.filter(x => x[indexOfStarName] && x[indexOfStarName].toLowerCase() === starN.toLowerCase());
@@ -211,7 +232,5 @@ function getGradient() {
         .attr("stop-color", "#FB8933");
     return habitabilityScore;
 }
-
-
 
 buildSolarSystem();

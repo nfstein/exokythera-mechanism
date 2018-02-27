@@ -1,5 +1,9 @@
-function getPath(planet) {
-    var scaledOrditRadius = ((Number.parseFloat(planet[12] ? planet[12] : 0.0)*5 + Number.parseInt(50)));
+var menuSelected="desc";
+function getPath(planet, factor) {
+    const radius = factor > 0 && (Math.log(Number.parseFloat(planet[12] ? planet[12] : 0.0)*10)*100) > factor ? 
+    factor + ((Math.log(Number.parseFloat(planet[12] ? planet[12] : 0.0)*10)*100) - factor )/10 : 
+    (Math.log(Number.parseFloat(planet[12] ? planet[12] : 0.0)*10)*100);
+    var scaledOrditRadius = radius;
     var dFormula = "M " + sunXPosition + " " + sunYPosition +
         " m " + -scaledOrditRadius + ", 0" +
         " a " + scaledOrditRadius + "," + scaledOrditRadius + " 0 1,0 " + scaledOrditRadius * 2 + ",0" +
@@ -29,5 +33,6 @@ function menuBarHandler(event){
      var previousMenu = d3.selectAll("a")
                         .attr("class","");
      var currentSelection = d3.select(event)
-                            .attr("class","active");                   
+                            .attr("class","active");    
+     menuSelected = (event.id).split("#")[1];                                       
 }
