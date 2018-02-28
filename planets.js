@@ -25,30 +25,30 @@ var options = select
 
 
 //Appending planets to the body
-function buildPlanet(planet, orbitalScale) {
-    //var scaleFactor = (d3.max([svgHeight,svgWidth])/2)/maxRadius
-    //var width = (d3.max([svgHeight,svgWidth])/2)
-    //console.log('scaleFactor', scaleFactor)
-    //console.log('radius', planet[12])
-    //console.log('maxRadius', maxRadius)
-    //console.log('d3.max([svgHeight,svgWidth])/2', d3.max([svgHeight,svgWidth])/2)
-    //console.log('scaledRadius', orbitalScale(planet[12]))
-    //console.log('maxorbitalScale', orbitalScale(maxRadius))
+function buildPlanet(planet, orbitalScale) { //orbitalScale is the d3 scaling function
     var orbitSelection = svgSelection.append("path")
         .attr("d", getPath(orbitalScale(planet[12])))
         .attr("stroke", "lightgrey")
         .attr("stroke-width", "1")
         .attr("fill", "none")
         .attr("id", planet[0])
-        .on("mouseover", function () {
+        /*.on("mouseover", function () {
             mouseOver(this);
         })
         .on("mouseout", function () {
             mouseOut(this);
-        });
-    var planetSelection = svgSelection.append("circle")
-        .attr("r", Math.sqrt(Number.parseFloat(planet[11] ? planet[11] : 0.0)*300))
-        .attr("style", "fill:" + "url(#gradient-" + planet[0] + ")")
+        });*/
+    //not all planets have radius data
+    if (planet[11]) {
+        var planetSelection = svgSelection.append("circle")
+            .attr("r", planet[11]**.5*20)
+            .attr("style", "fill:" + "url(#gradient-" + planet[0] + ")")
+    }
+    else { //those with no radius get populated by mass
+        var planetSelection = svgSelection.append("circle")
+            .attr("r", (((planet[system_headers.indexOf('PlanetaryMassJpt')]/12)**.33)*3.5)*.5*20) //mass = volume*constant = c * 4pi * r^3
+            .attr("style", "fill:" + "url(#gradient-" + planet[0] + ")")
+    }
     //Fill each circle/planet with its corresponding gradient
     var animationSelection = planetSelection.append("animateMotion")
         .attr("dur", Number.parseFloat(planet[9] ? planet[9]  : 0.0)/2)
@@ -61,24 +61,24 @@ function buildPlanet(planet, orbitalScale) {
 
 
 function buildSolarSystem() {
-    const planetClrAttributes = getGradient();
-    const starName = document.getElementById("stars").value;
+    const planetClrAttributes = getGradient(); //creates fill gradients for each planet in system
+    const starName = document.getElementById("stars").value; 
     //filter all the planets for this sun
     const indexOfStarName = system_headers.indexOf("HostStar")
+    //planets is array of each planet data array for the system
     const planets = system_data.filter(x => x[indexOfStarName] && x[indexOfStarName].toLowerCase() === starName.toLowerCase());
+    //maxRadius currently bugged for our solar system at least
     var maxRadius = d3.max(planets,function(d){ console.log(d[12]); return d[12] });
     console.log('max: ', maxRadius)
+    //make sure earth orbit included for reference
     if (maxRadius < 1) {maxRadius = 1};
 
-    var orbitalScale = d3.scaleSqrt().domain([.00001,maxRadius]).range([0,.9*d3.min([svgHeight,svgWidth])/2]);
-    //d3.domain([0,maxRadius])//needs to be zero not minRadius or will place first planet under sun
-    //d3.range([0,d3.min([svgHeight,svgWidth])/2])
-    //const logOfMaxRadius =  Math.log(Number.parseFloat(maxRadius)*10)*100;
-    //var scaleFactor = 0.0;
-    /*if(logOfMaxRadius>=d3.max([svgHeight,svgWidth])/2){
-        scaleFactor = (d3.max([svgHeight,svgWidth])-100)/2;
-    }*/
-    extraOrbits(planets[0], orbitalScale)
+    //sqrt scale makes tiny orbits larger and giant orbits smaller
+    var orbitalScale = d3.scaleSqrt()
+        .domain([.00001,maxRadius]) //not quite zero to avoid undefineds
+        .range([0,.9*d3.min([svgHeight,svgWidth])/2]); //range leaves a 10% border around edge
+
+    extraOrbits(planets[0], orbitalScale) //populates earth orbit, habitable zone
     planets.map((x, i) => {
         buildPlanet(x, orbitalScale);
     });
@@ -86,9 +86,10 @@ function buildSolarSystem() {
 }
 
 function extraOrbits(planet,orbitalScale) {
+    //earth orbit of 1AU
     var earthOrbit = svgSelection.append("path")
         .attr("d", getPath(orbitalScale(1)))
-        .attr("stroke", "blue")
+        .attr("stroke", "#1F75FE")
         .attr("stroke-width", "2")
         .attr("fill", "none")
         .attr("id", '1AU');
@@ -123,10 +124,20 @@ function extraOrbits(planet,orbitalScale) {
         .attr("opacity", .1)
         .attr("id", 'liberal habitable zone');*/
 
+    var textPath = svgSelection
+        .append('text')
+        .attr('font-size', '18px')
+        .attr('fill', "#1F75FE")
+        .append("textPath")
+        .attr('startOffset', '22%')
+        .attr('xlink:href', "#1AU")
+        .text('1 AU');
+    
+    
 }
 
 
-function mouseOver(p) {
+/*function mouseOver(p) {
     const starName = document.getElementById("stars").value;
     //filter all the planets for this sun
     const indexOfStarName = system_headers.indexOf("HostStar")
@@ -149,12 +160,12 @@ function mouseOver(p) {
         .attr("font-family", "sans-serif")
         .attr("font", "10")
         .attr("class", "wrap")
-}
+}*/
 
-function mouseOut(p) {
+/*function mouseOut(p) {
     d3.selectAll("rect").data([]).exit().remove();
     d3.selectAll("text").data([]).exit().remove();
-}
+}*/
 
 
 function addSun(starN) {
@@ -170,11 +181,34 @@ function handleTabClick(systemDesc_2, planets, starN){
         removeHomeTab(); 
         removeChartsTab();
         getHomeDivs(systemDesc_2,starN);
-        var sunSelection = svgSelection.append("circle")
-        .attr("cx", sunXPosition)
-        .attr("cy", sunYPosition)
-        .attr("r", Number.parseFloat(planets[0][6] ? planets[0][6] : 0.0) + Number.parseInt(10))
-        .attr("style", "fill:" + "url(#radial-gradient)");
+        if (planets[0][system_headers.indexOf('HostStarColor')]){
+            var sunSelection = svgSelection.append("circle")
+                .attr("cx", sunXPosition)
+                .attr("cy", sunYPosition)
+                .attr("r", Number.parseFloat(planets[0][6] ? planets[0][6] : 0.0) + Number.parseInt(10))
+                .attr("style", "fill:" + planets[0][system_headers.indexOf('HostStarColor')]);//"url(#radial-gradient)");
+        }
+        else {
+            var animationHTML = `<animateTransform attributeName="transform"
+                type="rotate"
+                from="360 ${sunXPosition} ${sunYPosition}" to="0 ${sunXPosition} ${sunYPosition}"
+                begin="0s" dur="1s"
+                repeatCount="indefinite"
+            />`
+            var sun1Selection = svgSelection.append("circle")
+                .attr("cx", sunXPosition+3)
+                .attr("cy", sunYPosition)
+                .attr("r", (Number.parseFloat(planets[0][6] ? planets[0][6] : 0.0) + Number.parseInt(10)))
+                .attr("style", "fill:" + 'yellow')
+                .html(animationHTML);
+            var sun2Selection = svgSelection.append("circle")
+                .attr("cx", sunXPosition-15)
+                .attr("cy", sunYPosition)
+                .attr("r", (Number.parseFloat(planets[0][6] ? planets[0][6] : 0.0) + Number.parseInt(10))/3)
+                .attr("style", "fill:" + '#A52A2A')//"url(#radial-gradient)");
+                .html(animationHTML);
+
+        }
         break;
         case "graphs":
         removeHomeTab(); 
@@ -221,6 +255,8 @@ var chart4Div =   d3.select("div#charts").append("div")
 function onchange() {
     cleanSvg();
     buildSolarSystem();
+    buildPlots();
+
 }
 
 function getGradient() {
@@ -298,11 +334,46 @@ function getGradient() {
     return habitabilityScore;
 }
 
-function buildPlot() {
-    console.log(document.getElementById("plotTest"));
-    Plotly.newPlot('chart2', [trace01, trace02], barLayout)
-    Plotly.newPlot('chart4', [barTrace01, barTrace02], barLayout)
+function buildPlots() {
+    const starName = document.getElementById("stars").value; 
 
+    const indexOfStarName = system_headers.indexOf("HostStar")
+    //planets is array of each planet data array for the system
+    const planets = system_data.filter(x => x[indexOfStarName] && x[indexOfStarName].toLowerCase() === starName.toLowerCase());
+    var names = []
+    var radii = []
+    var mass = []
+    var sizes = []
+    planets.forEach(planet => {
+        console.log('radius', planet[11], 'mass', planet[10] )
+        names.push(planet[0])
+        if (planet[11]) {
+            var rad = Number.parseFloat(planet[11])
+            radii.push(rad)
+            sizes.push(rad*20)
+        } else {
+            var rad = (((Number.parseFloat(planet[10])/12)**.33)*3.5)
+            radii.push(rad)
+            sizes.push(rad*20)
+        }
+        if (planet[10]) {
+            mass.push(planet[10])
+        }
+        else {mass.push((((rad/3.5)**3)*12))}
+    })
+
+
+    var bubbleTrace02 = {'marker': {'color': 'red', 'opacity': 0.9, 'size': sizes},
+        'mode': 'lines+markers',
+        'text': names,
+        'x': mass,
+        'y': radii
+    }
+
+    Plotly.newPlot('chartTest2', [bubbleTrace01, bubbleTrace02], )
+    Plotly.newPlot('chartTest4', [barTrace01, barTrace02], barLayout)
 }
 
 buildSolarSystem();
+
+buildPlots();

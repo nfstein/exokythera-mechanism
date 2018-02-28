@@ -711,7 +711,7 @@ const system_data = [
       "0.13168141460872204",
       "0.1897067968500665",
       "S-type binary",
-      "nan"
+      ""
     ],
     [
       "Gliese_667C_h",
@@ -734,7 +734,7 @@ const system_data = [
       "0.13168141460872204",
       "0.1897067968500665",
       "S-type binary",
-      "nan"
+      ""
     ],
     [
       "Gliese_667C_c",
@@ -757,7 +757,7 @@ const system_data = [
       "0.13168141460872204",
       "0.1897067968500665",
       "S-type binary",
-      "nan"
+      ""
     ],
     [
       "Gliese_667C_f",
@@ -780,7 +780,7 @@ const system_data = [
       "0.13168141460872204",
       "0.1897067968500665",
       "S-type binary",
-      "nan"
+      ""
     ],
     [
       "Gliese_667C_e",
@@ -803,7 +803,7 @@ const system_data = [
       "0.13168141460872204",
       "0.1897067968500665",
       "S-type binary",
-      "nan"
+      ""
     ],
     [
       "Gliese_667C_d",
@@ -826,7 +826,7 @@ const system_data = [
       "0.13168141460872204",
       "0.1897067968500665",
       "S-type binary",
-      "nan"
+      ""
     ],
     [
       "Gliese_667C_g",
@@ -849,7 +849,7 @@ const system_data = [
       "0.13168141460872204",
       "0.1897067968500665",
       "S-type binary",
-      "nan"
+      ""
     ],
     [
       "HD_219134_b",

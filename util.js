@@ -23,6 +23,8 @@ function cleanSvg() {
     d3.selectAll("h1").data([]).exit().remove();
     d3.selectAll("h5").data([]).exit().remove();
     d3.selectAll("p").data([]).exit().remove();
+
+    
 }
 
 function removeHomeTab(){
@@ -32,7 +34,11 @@ function removeHomeTab(){
 }
 
 function removeChartsTab(){
-    d3.selectAll("div#charts").data([]).exit().remove();
+    ids = ['chartTest1','chartTest2','chartTest3','chartTest4']
+    ids.forEach(id => { 
+        d3.select('#'+id).remove();
+        d3.select('#charts').append('div').attr('id', id);
+    })
 }
 
 function menuBarHandler(event){ 
