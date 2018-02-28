@@ -39,7 +39,7 @@ function buildPlanet(planet, scaleFactor) {
             mouseOut(this);
         });
     var planetSelection = svgSelection.append("circle")
-        .attr("r", Number.parseFloat(planet[11] ? planet[11] : 0.0) + Number.parseInt(10))
+        .attr("r", Math.sqrt(Number.parseFloat(planet[11] ? planet[11] : 0.0)*300))
         .attr("style", "fill:" + "url(#gradient-" + planet[0] + ")")
     //Fill each circle/planet with its corresponding gradient
     var animationSelection = planetSelection.append("animateMotion")
@@ -105,52 +105,64 @@ function mouseOut(p) {
 
 
 function addSun(starN) {
+        //filter all the planets for this sun
+    const indexOfStarName = system_headers.indexOf("HostStar")
+    const planets = system_data.filter(x => x[indexOfStarName] && x[indexOfStarName].toLowerCase() === starN.toLowerCase());
+    handleTabClick(systemDesc_2, planets, starN);
+}
+
+function handleTabClick(systemDesc_2, planets, starN){
     switch(menuSelected){
         case "desc":
-        var h1 = d3.select("div.w3-padding-large").append("h1")
-        .attr("class", "w3-center")
-        .text(starN);
-        var h5 = d3.select("div.w3-padding-large").append("h5")
-        .attr("class", "w3-center")
-        .text("Heading");
-        var p1 = d3.select("div.w3-padding-large").append("p")
-        .attr("class", "w3-large")
-        .text(systemDesc_1[0][starN]);
-        var p2 = d3.select("div.w3-padding-large").append("p")
-        .attr("class", "w3-large w3-hide-medium")
-        .text(systemDesc_2[0][starN]);
+        removeHomeTab(); 
+        removeChartsTab();
+        getHomeDivs(systemDesc_2,starN);
+        var sunSelection = svgSelection.append("circle")
+        .attr("cx", sunXPosition)
+        .attr("cy", sunYPosition)
+        .attr("r", Number.parseFloat(planets[0][6] ? planets[0][6] : 0.0) + Number.parseInt(10))
+        .attr("style", "fill:" + "url(#radial-gradient)");
         break;
-        case "charts":
-        var chartsDiv = d3.select("div#charts").append("h1")
-                        .attr("class","w3-center")
-                        .text("sample charts");
+        case "graphs":
+        removeHomeTab(); 
+        removeChartsTab();
+        getChartsDivs();                                       
         break;
         default:
           break;
     }
+}
+function getHomeDivs(systemDesc_2, starN){
+    var h1 = d3.select("div.w3-padding-large").append("h1")
+    .attr("class", "w3-center")
+    .text(starN);
+    var h5 = d3.select("div.w3-padding-large").append("h5")
+    .attr("class", "w3-center")
+    .text("Heading");
+    var p1 = d3.select("div.w3-padding-large").append("p")
+    .attr("class", "w3-large")
+    .text(systemDesc_1[0][starN]);
+    var p2 = d3.select("div.w3-padding-large").append("p")
+    .attr("class", "w3-large w3-hide-medium")
+    .text(systemDesc_2[0][starN]);
+    ;
+}
 
-    //filter all the planets for this sun
-    const indexOfStarName = system_headers.indexOf("HostStar")
-    const planets = system_data.filter(x => x[indexOfStarName] && x[indexOfStarName].toLowerCase() === starN.toLowerCase());
-    var sunSelection = svgSelection.append("circle")
-        .attr("cx", sunXPosition)
-        .attr("cy", sunYPosition)
-        .attr("r", Number.parseFloat(planets[0][6] ? planets[0][6] : 0.0)+Number.parseInt(10))
-        .attr("style", "fill:" + "url(#radial-gradient)")
-        .on("click", function () {
-            var h1 = d3.select("div.w3-col m6 w3-padding-large").append("h1")
-                .attr("class", "w3-center")
-                .text(star);
-            var h5 = d3.select("div.w3-col m6 w3-padding-large").append("h5")
-                .attr("class", "w3-center")
-                .text("Heading");
-            var p1 = d3.select("div.w3-col m6 w3-padding-large").append("p")
-                .attr("class", "w3-large")
-                .text(systemDesc_1[0][starN]);
-            var p2 = d3.select("w3-large w3-hide-medium").append("p")
-                .attr("class", "w3-large w3-hide-medium")
-                .attr(systemDesc_2[0][starN]);
-        });
+function getChartsDivs(){
+    var chartsParentDiv = d3.select("div#about").append("div")
+    .attr("id","charts");
+var chart1Div =   d3.select("div#charts").append("div")
+     .attr("id","chart1")
+     .text("Chart1")   ;         
+var chart2Div =   d3.select("div#charts").append("div")
+     .attr("id","chart2")
+     .text("Chart2") ;
+var chart3Div =   d3.select("div#charts").append("div")
+     .attr("id","chart3")
+     .text("Chart3") 
+var chart4Div =   d3.select("div#charts").append("div")
+     .attr("id","chart4")   
+     .text("Chart4")    ; 
 }
 
 function onchange() {
