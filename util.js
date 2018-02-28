@@ -34,7 +34,7 @@ function removeHomeTab(){
 }
 
 function removeChartsTab(){
-    ids = ['chartTest1','chartTest2','chartTest3','chartTest4']
+    ids = ['chart1','chart2','chart3','chart4']
     ids.forEach(id => { 
         d3.select('#'+id).remove();
         d3.select('#charts').append('div').attr('id', id);

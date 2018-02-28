@@ -240,23 +240,22 @@ function getChartsDivs(){
     .attr("id","charts");
 var chart1Div =   d3.select("div#charts").append("div")
      .attr("id","chart1")
-     .text("Chart1")   ;         
+     .text("chart1")   ;         
 var chart2Div =   d3.select("div#charts").append("div")
      .attr("id","chart2")
-     .text("Chart2") ;
+     .text("chart2") ;
 var chart3Div =   d3.select("div#charts").append("div")
      .attr("id","chart3")
-     .text("Chart3") 
+     .text("chart3") 
 var chart4Div =   d3.select("div#charts").append("div")
      .attr("id","chart4")   
-     .text("Chart4")    ; 
+     .text("chart4")    ; 
 }
 
 function onchange() {
     cleanSvg();
     buildSolarSystem();
     buildPlots();
-
 }
 
 function getGradient() {
