@@ -24,33 +24,6 @@ var options = $select
         return d;
     });
 
-
-//Appending planets to the body
-/*function buildPlanet(planet) {
-    var orbitSelection = svgSelection.append("path")
-        .attr("d", getPath(planet))
-        .attr("stroke", "lightgrey")
-        .attr("stroke-width", "1")
-        .attr("fill", "none")
-        .attr("id", planet[0])
-        .on("mouseover", function () {
-            mouseOver(this);
-        })
-        .on("mouseout", function () {
-            mouseOut(this);
-        });
-    var planetSelection = svgSelection.append("circle")
-        .attr("r", Number.parseFloat(planet[11] ? planet[11] : 0.0) + Number.parseInt(10))
-        .attr("style", "fill:" + "url(#gradient-" + planet[0] + ")")
-    //Fill each circle/planet with its corresponding gradient
-    var animationSelection = planetSelection.append("animateMotion")
-        .attr("dur", Number.parseFloat(planet[9] ? planet[9]  : 0.0)/2)
-        .attr("repeatCount", "indefinite");
-    var mPathSelection = animationSelection.append("mpath")
-        .attr("xlink:href", "#" + planet[0]);
-    //Adding callbacks
-}*/
-
 function buildPlanet(planet, scaleFactor, timeFactor) {
     console.log(planet)
     var randAngle = Math.random()*2*3.14
@@ -85,7 +58,6 @@ function buildPlanet(planet, scaleFactor, timeFactor) {
 function buildSolarSystem() {
     const planetClrAttributes = getGradient();
     const starName = document.getElementById("stars").value;
-    console.log(test[starName])
     //filter all the planets for this sun
     const indexOfStarName = system_headers.indexOf("HostStar")
     const planets = system_data.filter(x => x[indexOfStarName] && x[indexOfStarName].toLowerCase() === starName.toLowerCase());
@@ -111,18 +83,20 @@ function addExtraOrbits(planet, scaleFactor) {
         .attr("stroke-width", "2")
         .attr("fill", "none")
         .attr("id", '1AU');
-    var lilHabitable = svgSelection.append("path")
-        .attr("d", getPath(planet[system_headers.indexOf("HostStarInnerHabitabilityAU")] * scaleFactor))
+
+    var inner = planet[system_headers.indexOf("HostStarInnerHabitabilityAU")] * scaleFactor
+    var outer = planet[system_headers.indexOf("HostStarOuterHabitabilityAU")] * scaleFactor
+
+    var width = outer-inner
+    var radius = (width)/2 + inner
+
+    var earthOrbit = svgSelection.append("path")
+        .attr("d", getPath(radius))
         .attr("stroke", "green")
-        .attr("stroke-width", "2")
+        .attr("stroke-width", width)
         .attr("fill", "none")
-        .attr("id", 'innerHabitable');
-    var lilHabitable = svgSelection.append("path")
-        .attr("d", getPath(planet[system_headers.indexOf("HostStarOuterHabitabilityAU")] * scaleFactor))
-        .attr("stroke", "green")
-        .attr("stroke-width", "2")
-        .attr("fill", "none")
-        .attr("id", 'outerHabitable');
+        .attr("opacity", .4)
+        .attr("id", 'habitable zone');
 }
 
 function getTimeFactor(planets, modifier) {
@@ -311,6 +285,14 @@ function getGradient() {
     return habitabilityScore;
 }
 
+function buildPlot() {
+    console.log(document.getElementById("plotTest"));
+    Plotly.newPlot('plotTest', [barTrace01, barTrace02], barLayout)
+}
+
 
 
 buildSolarSystem();
+
+
+buildPlot();

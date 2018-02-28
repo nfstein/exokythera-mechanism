@@ -52,10 +52,10 @@ function buildPlanet(planet, planetName, scaleFactor, timeFactor) {
 
     console.log(planetName, ' radius - ', radius)
     var $planetSelection = svgSelection.append("circle")
-        .attr("r", (radius**.5 * 20)) 
+        .attr("r", (planetScale(radius))) 
         .attr("cx", cx)
         .attr("cy", cy)
-        .attr("style", "fill:" + 'blue')//somethings up with the radius, will address later "url(#gradient-" + planetName + ")")
+        .attr("style", "fill:" + 'blue')//somethings up with the radius, will address later: "url(#gradient-" + planetName + ")")
         .html(animationHTML)
 }
 
@@ -108,7 +108,7 @@ function addExtraOrbits(system, scaleFactor) {
 }
 
 function getTimeFactor(system, modifier) {
-    //slowest orbit completes in 10 seconds
+    //slowest orbit completes in 3 seconds
     var minTime;
     system.list.forEach(planet => {
         var time = system[planet]['PeriodDays']
@@ -123,8 +123,10 @@ function getTimeFactor(system, modifier) {
     console.log('minTime = ', minTime)
     return (3/minTime)*modifier;
 }
-
-//loop through planets to find max orbit -> .5*windowSize/max orbit or 1AU is window size
+function planetScale(radius) {
+    return (radius**.4)*10
+}
+//loop through planets to find max orbit or 1AU -> windowSize
 function getScaleFactor(system, width) {
     //Number.parseFloat(planet[11])
     console.log(system);
@@ -197,7 +199,7 @@ function addSun(starN) {
         var $sunSelection = svgSelection.append("circle")
             .attr("cx", sunXPosition)
             .attr("cy", sunYPosition)
-            .attr("r", planetStats['HostStarRadiusSlrRad']**.5 * 5)
+            .attr("r", planetScale(planetStats['HostStarRadiusSlrRad'])/2)
             .attr("fill", planetStats['HostStarColor'])
             .attr("style", "fill:" + planetStats['HostStarColor'] )//"url(#radial-gradient)")
             .on("click", function () {
@@ -226,7 +228,7 @@ function addSun(starN) {
         var $sun1Selection = svgSelection.append("circle")
             .attr("cx", sunXPosition+1)
             .attr("cy", sunYPosition)
-            .attr("r", planetStats['HostStarRadiusSlrRad']**.5 * 5)
+            .attr("r", planetScale(planetStats['HostStarRadiusSlrRad'])/2)
             .attr("style", "fill:" + "url(#radial-gradient)")
             .on("click", function () {
                 var $h1 = d3.select("div.w3-col m6 w3-padding-large").append("h1")
@@ -245,9 +247,9 @@ function addSun(starN) {
             .html(animationHTML);
 
         var $sun2Selection = svgSelection.append("circle")
-            .attr("cx", sunXPosition-12)
+            .attr("cx", sunXPosition-8)
             .attr("cy", sunYPosition)
-            .attr("r", (planetStats['HostStarRadiusSlrRad']**.5 * 5)/2)
+            .attr("r", planetScale(planetStats['HostStarRadiusSlrRad'])/4)
             .attr("fill", 'orange')
             .on("click", function () {
                 var $h1 = d3.select("div.w3-col m6 w3-padding-large").append("h1")
