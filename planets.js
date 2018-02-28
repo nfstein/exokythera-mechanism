@@ -23,6 +23,7 @@ var options = select
         return d;
     });
 
+const density = 2 //mass density of planets
 
 //Appending planets to the body
 function buildPlanet(planet, orbitalScale) { //orbitalScale is the d3 scaling function
@@ -39,16 +40,16 @@ function buildPlanet(planet, orbitalScale) { //orbitalScale is the d3 scaling fu
             mouseOut(this);
         });*/
     //not all planets have radius data
-    if (planet[11]) {
+    /*if (planet[11]) {
         var planetSelection = svgSelection.append("circle")
             .attr("r", planet[11]**.5*20)
             .attr("style", "fill:" + "url(#gradient-" + planet[0] + ")")
     }
-    else { //those with no radius get populated by mass
+    else {*/ //those with no radius get populated by mass
         var planetSelection = svgSelection.append("circle")
-            .attr("r", (((planet[system_headers.indexOf('PlanetaryMassJpt')]/12)**.33)*3.5)*.5*20) //mass = volume*constant = c * 4pi * r^3
+            .attr("r", (((planet[system_headers.indexOf('PlanetaryMassJpt')]/4)**.33)*density)**.5*20) //mass = volume*constant = c * 4/3 * pi * r^3
             .attr("style", "fill:" + "url(#gradient-" + planet[0] + ")")
-    }
+    //}
     //Fill each circle/planet with its corresponding gradient
     var animationSelection = planetSelection.append("animateMotion")
         .attr("dur", Number.parseFloat(planet[9] ? planet[9]  : 0.0)/2)
@@ -238,16 +239,16 @@ function getHomeDivs(systemDesc_2, starN){
 function getChartsDivs(){
     var chartsParentDiv = d3.select("div#about").append("div")
     .attr("id","charts");
-var chart1Div =   d3.select("div#charts").append("div")
-     .attr("id","chart1")
-     .text("Chart1")   ;         
-var chart2Div =   d3.select("div#charts").append("div")
-     .attr("id","chart2")
-     .text("Chart2") ;
-var chart3Div =   d3.select("div#charts").append("div")
-     .attr("id","chart3")
-     .text("Chart3") 
-var chart4Div =   d3.select("div#charts").append("div")
+    var chart1Div =   d3.select("div#charts").append("div")
+        .attr("id","chart1")
+        .text("Chart1")   ;         
+    var chart2Div =   d3.select("div#charts").append("div")
+        .attr("id","chart2")
+        .text("Chart2") ;
+    var chart3Div =   d3.select("div#charts").append("div")
+        .attr("id","chart3")
+        .text("Chart3") 
+    var chart4Div =   d3.select("div#charts").append("div")
      .attr("id","chart4")   
      .text("Chart4")    ; 
 }
@@ -352,14 +353,14 @@ function buildPlots() {
             radii.push(rad)
             sizes.push(rad*20)
         } else {
-            var rad = (((Number.parseFloat(planet[10])/12)**.33)*3.5)
+            var rad = (((Number.parseFloat(planet[10])/4)**.33)*density)
             radii.push(rad)
             sizes.push(rad*20)
         }
         if (planet[10]) {
             mass.push(planet[10])
         }
-        else {mass.push((((rad/3.5)**3)*12))}
+        else {mass.push((((rad/density)**3)*4))}
     })
 
 
