@@ -33,7 +33,7 @@ function removeHomeTab(){
     d3.selectAll("p").data([]).exit().remove();
 }
 
-function removeChartsTab(){
+function manageChartsTab(){
     ids = ['chart1','chart2','chart3','chart4']
     ids.forEach(id => { 
         d3.select('#'+id).remove();
