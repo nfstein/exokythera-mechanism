@@ -40,16 +40,16 @@ function buildPlanet(planet, orbitalScale) { //orbitalScale is the d3 scaling fu
             mouseOut(this);
         });*/
     //not all planets have radius data
-    /*if (planet[11]) {
+    if (planet[11]) {
         var planetSelection = svgSelection.append("circle")
             .attr("r", planet[11]**.5*20)
             .attr("style", "fill:" + "url(#gradient-" + planet[0] + ")")
     }
-    else {*/ //those with no radius get populated by mass
+    else { //those with no radius get populated by mass
         var planetSelection = svgSelection.append("circle")
             .attr("r", (((planet[system_headers.indexOf('PlanetaryMassJpt')]/4)**.33)*density)**.5*20) //mass = volume*constant = c * 4/3 * pi * r^3
             .attr("style", "fill:" + "url(#gradient-" + planet[0] + ")")
-    //}
+    }
     //Fill each circle/planet with its corresponding gradient
     var animationSelection = planetSelection.append("animateMotion")
         .attr("dur", Number.parseFloat(planet[9] ? planet[9]  : 0.0)/2)
