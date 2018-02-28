@@ -213,8 +213,8 @@ function handleTabClick(systemDesc_2, planets, starN){
         break;
         case "graphs":
         removeHomeTab(); 
-        removeChartsTab();
-        getChartsDivs();                                       
+        manageChartsTab(); //both creation and deletion happening here, but not within the right tab yet, just below frame for now
+        //getChartsDivs(); works better in manage() above I think                             
         break;
         default:
           break;
