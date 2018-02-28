@@ -298,4 +298,11 @@ function getGradient() {
     return habitabilityScore;
 }
 
+function buildPlot() {
+    console.log(document.getElementById("plotTest"));
+    Plotly.newPlot('chart2', [trace01, trace02], barLayout)
+    Plotly.newPlot('chart4', [barTrace01, barTrace02], barLayout)
+
+}
+
 buildSolarSystem();
