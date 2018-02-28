@@ -1,13 +1,9 @@
 var menuSelected="desc";
-function getPath(planet, factor) {
-    const radius = factor > 0 && (Math.log(Number.parseFloat(planet[12] ? planet[12] : 0.0)*10)*100) > factor ? 
-    factor + ((Math.log(Number.parseFloat(planet[12] ? planet[12] : 0.0)*10)*100) - factor/100 )/10 : 
-    (Math.log(Number.parseFloat(planet[12] ? planet[12] : 0.0)*10)*100);
-    var scaledOrditRadius = radius;
+function getPath(radius) {
     var dFormula = "M " + sunXPosition + " " + sunYPosition +
-        " m " + -scaledOrditRadius + ", 0" +
-        " a " + scaledOrditRadius + "," + scaledOrditRadius + " 0 1,0 " + scaledOrditRadius * 2 + ",0" +
-        " a " + scaledOrditRadius + "," + scaledOrditRadius + " 0 1,0 " + -scaledOrditRadius * 2 + ",0";
+        " m " + -radius + ", 0" +
+        " a " + radius + "," + radius + " 0 1,0 " + radius * 2 + ",0" +
+        " a " + radius + "," + radius + " 0 1,0 " + -radius * 2 + ",0";
     return dFormula;
 };
 function compare(a, b) {

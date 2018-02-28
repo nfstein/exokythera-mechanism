@@ -25,9 +25,17 @@ var options = select
 
 
 //Appending planets to the body
-function buildPlanet(planet, scaleFactor) {
+function buildPlanet(planet, orbitalScale) {
+    //var scaleFactor = (d3.max([svgHeight,svgWidth])/2)/maxRadius
+    //var width = (d3.max([svgHeight,svgWidth])/2)
+    //console.log('scaleFactor', scaleFactor)
+    //console.log('radius', planet[12])
+    //console.log('maxRadius', maxRadius)
+    //console.log('d3.max([svgHeight,svgWidth])/2', d3.max([svgHeight,svgWidth])/2)
+    //console.log('scaledRadius', orbitalScale(planet[12]))
+    //console.log('maxorbitalScale', orbitalScale(maxRadius))
     var orbitSelection = svgSelection.append("path")
-        .attr("d", getPath(planet, scaleFactor))
+        .attr("d", getPath(orbitalScale(planet[12])))
         .attr("stroke", "lightgrey")
         .attr("stroke-width", "1")
         .attr("fill", "none")
@@ -58,18 +66,63 @@ function buildSolarSystem() {
     //filter all the planets for this sun
     const indexOfStarName = system_headers.indexOf("HostStar")
     const planets = system_data.filter(x => x[indexOfStarName] && x[indexOfStarName].toLowerCase() === starName.toLowerCase());
-    const maxRadius = d3.max(planets,function(d){
-                         return d[12];
-    });
-    const logOfMaxRadius =  Math.log(Number.parseFloat(maxRadius)*10)*100;
-    var scaleFactor = 0.0;
-    if(logOfMaxRadius>=d3.max([svgHeight,svgWidth])/2){
+    var maxRadius = d3.max(planets,function(d){ console.log(d[12]); return d[12] });
+    console.log('max: ', maxRadius)
+    if (maxRadius < 1) {maxRadius = 1};
+
+    var orbitalScale = d3.scaleSqrt().domain([.00001,maxRadius]).range([0,.9*d3.min([svgHeight,svgWidth])/2]);
+    //d3.domain([0,maxRadius])//needs to be zero not minRadius or will place first planet under sun
+    //d3.range([0,d3.min([svgHeight,svgWidth])/2])
+    //const logOfMaxRadius =  Math.log(Number.parseFloat(maxRadius)*10)*100;
+    //var scaleFactor = 0.0;
+    /*if(logOfMaxRadius>=d3.max([svgHeight,svgWidth])/2){
         scaleFactor = (d3.max([svgHeight,svgWidth])-100)/2;
-    }
+    }*/
+    extraOrbits(planets[0], orbitalScale)
     planets.map((x, i) => {
-        buildPlanet(x, scaleFactor);
+        buildPlanet(x, orbitalScale);
     });
     addSun(starName);
+}
+
+function extraOrbits(planet,orbitalScale) {
+    var earthOrbit = svgSelection.append("path")
+        .attr("d", getPath(orbitalScale(1)))
+        .attr("stroke", "blue")
+        .attr("stroke-width", "2")
+        .attr("fill", "none")
+        .attr("id", '1AU');
+
+    var inner = orbitalScale(Number.parseFloat(planet[system_headers.indexOf("HostStarInnerHabitabilityAU")]))
+    var outer = orbitalScale(Number.parseFloat(planet[system_headers.indexOf("HostStarOuterHabitabilityAU")]))
+
+    var width = outer-inner
+    var radius = (width)/2 + inner
+    
+    /*var conservativeHabitable = svgSelection.append("path")
+        .attr("d", getPath(radius))
+        .attr("stroke", "green")
+        .attr("stroke-width", width)
+        .attr("fill", "none")
+        .attr("opacity", .2)
+        .attr("id", 'habitable zone');*/
+
+    var liberalHabitable = svgSelection.append("path")
+        .attr("d", getPath(radius))
+        .attr("stroke", "green")
+        .attr("stroke-width", width*1.6)
+        .attr("fill", "none")
+        .attr("opacity", .4)
+        .attr("id", 'liberal habitable zone');
+    
+    /*var extraliberalHabitable = svgSelection.append("path")
+        .attr("d", getPath(radius))
+        .attr("stroke", "green")
+        .attr("stroke-width", width*2)
+        .attr("fill", "none")
+        .attr("opacity", .1)
+        .attr("id", 'liberal habitable zone');*/
+
 }
 
 
