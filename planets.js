@@ -96,15 +96,14 @@ function buildSolarSystem() {
     //sqrt scale makes tiny orbits larger and giant orbits smaller
     var orbitalScale = d3.scaleSqrt()
         .domain([.00001,maxRadius]) //not quite zero to avoid undefineds
-        .range([0,.9*d3.min([svgHeight,svgWidth])/2]); //range leaves a 10% border around edge
+        .range([0,.8*d3.min([svgHeight,svgWidth])/2]); //range leaves a 10% border around edge
 
     extraOrbits(planets[0], orbitalScale) //populates earth orbit, habitable zone
     planets.map((x, i) => {
         buildPlanet(x, orbitalScale);
     });
     addSun(starName);
-    buildPlots();
-    planetTable(planets);
+
 }
 
 function extraOrbits(planet,orbitalScale) {
@@ -180,6 +179,7 @@ function addSun(starN) {
         //filter all the planets for this sun
     const indexOfStarName = system_headers.indexOf("HostStar")
     const planets = system_data.filter(x => x[indexOfStarName] && x[indexOfStarName].toLowerCase() === starN.toLowerCase());
+    
     handleTabClick(systemDesc_2, planets, starN);
 }
 
@@ -189,12 +189,39 @@ function handleTabClick(systemDesc_2, planets, starN){
         removeHomeTab(); 
         removeChartsTab();
         addHomeDivs(systemDesc_2,starN);
-        drawStar(planets[0]);
+        if (planets[0][system_headers.indexOf('HostStarColor')]){
+            var sunSelection = svgSelection.append("circle")
+                .attr("cx", sunXPosition)
+                .attr("cy", sunYPosition)
+                .attr("r", Number.parseFloat(planets[0][6] ? planets[0][6] : 1)**.5 *10)
+                .attr("style", "fill:" + planets[0][system_headers.indexOf('HostStarColor')]);//"url(#radial-gradient)");
+        }
+        else {
+            var animationHTML = `<animateTransform attributeName="transform"
+                type="rotate"
+                from="360 ${sunXPosition} ${sunYPosition}" to="0 ${sunXPosition} ${sunYPosition}"
+                begin="0s" dur="1s"
+                repeatCount="indefinite"
+            />`
+            var sun1Selection = svgSelection.append("circle")
+                .attr("cx", sunXPosition+3)
+                .attr("cy", sunYPosition)
+                .attr("r", (Number.parseFloat(planets[0][6] ? planets[0][6] : 0.0) + Number.parseInt(10)))
+                .attr("style", "fill:" + '#ffd2a1')
+                .html(animationHTML);
+            var sun2Selection = svgSelection.append("circle")
+                .attr("cx", sunXPosition-15)
+                .attr("cy", sunYPosition)
+                .attr("r", (Number.parseFloat(planets[0][6] ? planets[0][6] : 0.0) + Number.parseInt(10))/3)
+                .attr("style", "fill:" + '#A52A2A')//"url(#radial-gradient)");
+                .html(animationHTML);
+    
+        }
         
         break;
         case "graphs":
         removeHomeTab(); 
-        removeChartsTab(); //both creation and deletion happening here, but not within the right tab yet, just below frame for now
+        removeChartsTab();
         addChartsGroup0();
         addChartsGroup1();    
         addChartsGroup2();                         
@@ -204,41 +231,13 @@ function handleTabClick(systemDesc_2, planets, starN){
     } 
 }
 
-function drawStar (planet) {
-    if (planet[system_headers.indexOf('HostStarColor')]){
-        var sunSelection = svgSelection.append("circle")
-            .attr("cx", sunXPosition)
-            .attr("cy", sunYPosition)
-            .attr("r", Number.parseFloat(planet[6] ? planet[6] : 0.0) + Number.parseInt(10))
-            .attr("style", "fill:" + planet[system_headers.indexOf('HostStarColor')]);//"url(#radial-gradient)");
-    }
-    else {
-        var animationHTML = `<animateTransform attributeName="transform"
-            type="rotate"
-            from="360 ${sunXPosition} ${sunYPosition}" to="0 ${sunXPosition} ${sunYPosition}"
-            begin="0s" dur="1s"
-            repeatCount="indefinite"
-        />`
-        var sun1Selection = svgSelection.append("circle")
-            .attr("cx", sunXPosition+3)
-            .attr("cy", sunYPosition)
-            .attr("r", (Number.parseFloat(planet[6] ? planet[6] : 0.0) + Number.parseInt(10)))
-            .attr("style", "fill:" + 'yellow')
-            .html(animationHTML);
-        var sun2Selection = svgSelection.append("circle")
-            .attr("cx", sunXPosition-15)
-            .attr("cy", sunYPosition)
-            .attr("r", (Number.parseFloat(planet[6] ? planet[6] : 0.0) + Number.parseInt(10))/3)
-            .attr("style", "fill:" + '#A52A2A')//"url(#radial-gradient)");
-            .html(animationHTML);
-
-    }
-}
-
 function onchange() {
     cleanSvg();
     buildSolarSystem();
-    buildPlots();
+    planetTable();
+    starTable();
+    buildPlot_0();
+
 }
 
 function getGradient() {
@@ -357,8 +356,37 @@ function getGradient() {
     Plotly.newPlot('chart1', [bubbleTrace01, bubbleTrace02], )
     Plotly.newPlot('chart2', [barTrace01, barTrace02], barLayout)
 }*/
+function starTable () {
+    const starName = document.getElementById("stars").value;
+    //filter all the planets for this sun
+    const indexOfStarName = system_headers.indexOf("HostStar")
+    const planet = system_data.filter(x => x[indexOfStarName] && x[indexOfStarName].toLowerCase() === starName.toLowerCase())[0];
 
-function planetTable (planets) {
+    rows = [
+        "HostStarClass", //19
+        "HostStarMassSlrMass", //4
+        "HostStarRadiusSlrRad", //6
+        "HostStarTempK", //7
+        "HostStarMetallicity", //5
+        "HostStarLuminosity", //16
+        "HostStarInnerHabitabilityAU", //17
+        "HostStarOuterHabitabilityAU", //18
+    ]
+
+    tableHTML = '<table style="width:100%"><tr><th>HostStar</th><th>'+starName+ '</th></tr>'
+    rows.forEach(row => {
+        tableHTML += `<tr><th>${row.slice(8)}</th><td>${planet[system_headers.indexOf(row)]}</td></tr>`
+    })
+    tableHTML += '</table>'
+    d3.select('#chartTest').html(tableHTML)
+
+}
+function planetTable () {
+    const starName = document.getElementById("stars").value;
+    //filter all the planets for this sun
+    const indexOfStarName = system_headers.indexOf("HostStar")
+    const planets = system_data.filter(x => x[indexOfStarName] && x[indexOfStarName].toLowerCase() === starName.toLowerCase());
+
     rows = [
         "PlanetaryMassJpt", //10
         "RadiusJpt", //11
@@ -370,7 +398,7 @@ function planetTable (planets) {
         "Eccentricity", //3
         "ListsPlanetIsOn", //8
     ]
-    tableHTML = '<tr><th>Planet</th>'
+    tableHTML = '<table style="width:100%"><tr><th>Planet</th>'
     planets.forEach(planet => {
         tableHTML += '<th>' +planet[0]+ '</th>'
     })
@@ -384,7 +412,9 @@ function planetTable (planets) {
         rowHTML += '</tr>'
         tableHTML += rowHTML
     })
-    d3.select('#chart4').html(tableHTML)
+    tableHTML += '</table>'
+    console.log(tableHTML)
+    d3.select('#chartTest').html(tableHTML)
 }
 /** For now have this method to just add 1 chart in the same row as svg*/
 function buildPlot_0() {
@@ -416,7 +446,9 @@ function buildPlot_0() {
     })
 
 
-    var bubbleTrace02 = {'marker': {'color': 'red', 'opacity': 0.9, 'size': sizes},
+    var bubbleTrace02 = {
+        'name': starName + ' System',
+        'marker': {'color': 'red', 'opacity': 0.9, 'size': sizes},
         'mode': 'lines+markers',
         'text': names,
         'x': mass,
@@ -427,5 +459,4 @@ function buildPlot_0() {
 }
 
 buildSolarSystem();
-buildPlots();
 planetTable();

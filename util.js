@@ -56,7 +56,7 @@ function addChartsGroup1(){
         d3.select('#charts_1_2').append('div').attr('id', id).attr('class',
         id === 'chart1' ? 'chart_first' : 'chart_second');
     });
-    buildPlots();
+    buildPlot_0();
 }
 
 function addChartsGroup2(){
@@ -65,7 +65,7 @@ function addChartsGroup2(){
         d3.select('#charts_3_4').append('div').attr('id', id).attr('class', 
         id === 'chart2' ? 'chart_first' : 'chart_second');
     });
-    //buildPlots();
+    //buildPlot_0();
 }
 
 function menuBarHandler(event){ 
