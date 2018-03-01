@@ -1653,3 +1653,16 @@ const systemLinks =[{
   "TRAPPIST-1":"https://en.wikipedia.org/wiki/TRAPPIST-1"
 
 }]
+
+const quotes =[{
+  "Kepler-9":'"Nature uses as little as possible of anything." — Johannes Kepler" ',
+  "Sun": '"Turn you face to the Sun and the shadows fall behind you." - Unknown"',
+  "HD 10180":'Only two things are infinite, the universe and human stupidity, and I\'m not sure about the former."— Albert Einstein,"',
+  "Kepler-90":'“…. after the laws of physics, everything else is an opinion.” - some random dude"',
+  "Gliese 667 C":'"I believe we exist in a multiverse of universes." Michio Kaku"',
+  "HD 219134":'“That’s one small step for a man, one giant leap for mankind.” - Neil Armstrong"',
+  "tau ceti":'“My view of our planet was a glimpse of divinity.” - Edgar Mitchell',
+  "HD 40307":'“If you are overweight on Earth, don’t blame dark matter." - Fitness freak',
+  "Gliese 581":'"The wonder is, not that the field of stars of so vast, but that man has measured it." - The Garden of Epicurus"',
+  "TRAPPIST-1":'"We\'re nothing but the space dust. Trying to find Its way back to The stars. - X"'
+}]

@@ -88,12 +88,13 @@ function addHomeDivs(systemDesc_2, starN){
     .text(starN);
     var h5 = d3.select("div.w3-padding-large").append("h5")
     .attr("class", "w3-center")
-    .text("Heading");
+    .text(quotes[0][starN]);
     var p1 = d3.select("div.w3-padding-large").append("p")
     .attr("class", "w3-large")
     .text(systemDesc_1[0][starN]);
     var p2 = d3.select("div.w3-padding-large").append("p")
     .attr("class", "w3-large w3-hide-medium")
-    .text(systemDesc_2[0][starN]);
+    .text(systemDesc_2[0][starN]+" To know more about your favorite system click ").append("a")
+    .attr("href", systemLinks[0][starN]).attr("target","_blank").text("here.");
     ;
 }
