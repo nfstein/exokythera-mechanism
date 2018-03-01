@@ -34,11 +34,20 @@ function removeHomeTab(){
 }
 
 function removeChartsTab(){
-    ids = ['chart1','chart2','chart3','chart4']
+    ids = ['chart0','chart1','chart2','chart3','chart4']
     ids.forEach(id => { 
         d3.select('#'+id).remove();
 
     })
+}
+
+function addChartsGroup0(){
+    ids = ['chart0']
+    ids.forEach(id => { 
+        divForSvg.append('div').attr('id', id).attr('class',
+        id === 'chart0' ? 'chart_first' : 'chart_second').attr('style',"padding-left:100px");
+    });
+    buildPlot_0();
 }
 
 function addChartsGroup1(){
@@ -80,12 +89,13 @@ function addHomeDivs(systemDesc_2, starN){
     .text(starN);
     var h5 = d3.select("div.w3-padding-large").append("h5")
     .attr("class", "w3-center")
-    .text("Heading");
+    .text(quotes[0][starN]);
     var p1 = d3.select("div.w3-padding-large").append("p")
     .attr("class", "w3-large")
     .text(systemDesc_1[0][starN]);
     var p2 = d3.select("div.w3-padding-large").append("p")
     .attr("class", "w3-large w3-hide-medium")
-    .text(systemDesc_2[0][starN]);
+    .text(systemDesc_2[0][starN]+" To know more about your favorite system click ").append("a")
+    .attr("href", systemLinks[0][starN]).attr("target","_blank").text("here.");
     ;
 }

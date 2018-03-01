@@ -2,7 +2,7 @@
 const sunXPosition = 100;
 const sunYPosition = 100;
 const svgWidth = 600;
-const svgHeight = 600;
+const svgHeight = 800;
 var systems = system_data;
 var bodySelection = d3.select("#home");
 var select = d3.select('#home')
@@ -10,10 +10,11 @@ var select = d3.select('#home')
     .attr('class', 'select')
     .attr('id', "stars")
     .on('change', onchange)
-var svgSelection = bodySelection.append("svg")
+var divForSvg =   bodySelection.append("div").attr('id', 'charts_0').attr('class', 'chart_parent_0');
+var svgSelection = divForSvg.append("svg")
     .attr("width", svgWidth)
     .attr("height", svgHeight)
-    .attr("style", "padding: 14em");
+    .attr("style", "padding-left: 18em; padding-top: 9em").attr('class','chart_first');
 
 var options = select
     .selectAll('option')
@@ -193,7 +194,8 @@ function handleTabClick(systemDesc_2, planets, starN){
         break;
         case "graphs":
         removeHomeTab(); 
-        removeChartsTab(); 
+        removeChartsTab(); //both creation and deletion happening here, but not within the right tab yet, just below frame for now
+        addChartsGroup0();
         addChartsGroup1();    
         addChartsGroup2();                         
         break;
@@ -314,7 +316,7 @@ function getGradient() {
     return habitabilityScore;
 }
 
-function buildPlots() {
+/*function buildPlots() {
     const starName = document.getElementById("stars").value; 
 
     const indexOfStarName = system_headers.indexOf("HostStar")
@@ -354,7 +356,7 @@ function buildPlots() {
 
     Plotly.newPlot('chart1', [bubbleTrace01, bubbleTrace02], )
     Plotly.newPlot('chart2', [barTrace01, barTrace02], barLayout)
-}
+}*/
 
 function planetTable (planets) {
     rows = [
@@ -383,6 +385,45 @@ function planetTable (planets) {
         tableHTML += rowHTML
     })
     d3.select('#chart4').html(tableHTML)
+}
+/** For now have this method to just add 1 chart in the same row as svg*/
+function buildPlot_0() {
+    const starName = document.getElementById("stars").value; 
+
+    const indexOfStarName = system_headers.indexOf("HostStar")
+    //planets is array of each planet data array for the system
+    const planets = system_data.filter(x => x[indexOfStarName] && x[indexOfStarName].toLowerCase() === starName.toLowerCase());
+    var names = []
+    var radii = []
+    var mass = []
+    var sizes = []
+    planets.forEach(planet => {
+        console.log('radius', planet[11], 'mass', planet[10] )
+        names.push(planet[0])
+        if (planet[11]) {
+            var rad = Number.parseFloat(planet[11])
+            radii.push(rad)
+            sizes.push(rad*20)
+        } else {
+            var rad = (((Number.parseFloat(planet[10])/4)**.33)*density)
+            radii.push(rad)
+            sizes.push(rad*20)
+        }
+        if (planet[10]) {
+            mass.push(planet[10])
+        }
+        else {mass.push((((rad/density)**3)*4))}
+    })
+
+
+    var bubbleTrace02 = {'marker': {'color': 'red', 'opacity': 0.9, 'size': sizes},
+        'mode': 'lines+markers',
+        'text': names,
+        'x': mass,
+        'y': radii
+    }
+
+    Plotly.newPlot('chart0', [bubbleTrace01, bubbleTrace02], );
 }
 
 buildSolarSystem();
