@@ -61,3 +61,21 @@ img {
 .active {
   background-color: #4CAF50 !important;
 }
+
+.chart_parent {
+  width: 1500px;
+  margin:0 auto;
+  padding: 0px;
+  overflow:hidden;/*contain child floats*/
+}
+.chart_first {
+  width: 680px;
+  height: 500px;
+  float: left;
+}
+
+.chart_second {
+  width: 680px;
+  height: 500px;
+  float: right;
+}

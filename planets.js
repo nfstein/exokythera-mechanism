@@ -181,7 +181,7 @@ function handleTabClick(systemDesc_2, planets, starN){
         case "desc":
         removeHomeTab(); 
         removeChartsTab();
-        getHomeDivs(systemDesc_2,starN);
+        addHomeDivs(systemDesc_2,starN);
         if (planets[0][system_headers.indexOf('HostStarColor')]){
             var sunSelection = svgSelection.append("circle")
                 .attr("cx", sunXPosition)
@@ -213,45 +213,13 @@ function handleTabClick(systemDesc_2, planets, starN){
         break;
         case "graphs":
         removeHomeTab(); 
-        manageChartsTab(); //both creation and deletion happening here, but not within the right tab yet, just below frame for now
-        //getChartsDivs(); works better in manage() above I think                             
+        removeChartsTab(); //both creation and deletion happening here, but not within the right tab yet, just below frame for now
+        addChartsGroup1();    
+        addChartsGroup2();                         
         break;
         default:
           break;
     }
-}
-function getHomeDivs(systemDesc_2, starN){
-    var h1 = d3.select("div.w3-padding-large").append("h1")
-    .attr("class", "w3-center")
-    .text(starN);
-    var h5 = d3.select("div.w3-padding-large").append("h5")
-    .attr("class", "w3-center")
-    .text("Heading");
-    var p1 = d3.select("div.w3-padding-large").append("p")
-    .attr("class", "w3-large")
-    .text(systemDesc_1[0][starN]);
-    var p2 = d3.select("div.w3-padding-large").append("p")
-    .attr("class", "w3-large w3-hide-medium")
-    .text(systemDesc_2[0][starN]);
-    ;
-}
-
-function getChartsDivs(){
-    var chartsParentDiv = d3.select("div#about").append("div")
-    .attr("id","charts");
-
-    var chart1Div =   d3.select("div#charts").append("div")
-        .attr("id","chart1")
-        .text("chart1")   ;         
-    var chart2Div =   d3.select("div#charts").append("div")
-        .attr("id","chart2")
-        .text("chart2") ;
-    var chart3Div =   d3.select("div#charts").append("div")
-        .attr("id","chart3")
-        .text("chart3") 
-    var chart4Div =   d3.select("div#charts").append("div")
-        .attr("id","chart4")   
-        .text("chart4")    ; 
 }
 
 function onchange() {
@@ -371,10 +339,8 @@ function buildPlots() {
         'y': radii
     }
 
-    Plotly.newPlot('chartTest2', [bubbleTrace01, bubbleTrace02], )
-    Plotly.newPlot('chartTest4', [barTrace01, barTrace02], barLayout)
+    Plotly.newPlot('chart1', [bubbleTrace01, bubbleTrace02], )
+    Plotly.newPlot('chart2', [barTrace01, barTrace02], barLayout)
 }
 
 buildSolarSystem();
-
-buildPlots();
