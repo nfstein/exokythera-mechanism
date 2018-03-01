@@ -1,8 +1,9 @@
 //reading data csv
-const sunXPosition = 100;
-const sunYPosition = 100;
+
 const svgWidth = 600;
 const svgHeight = 800;
+const sunXPosition = 100;//svgWidth/2;
+const sunYPosition = 100//svgHeight/2;
 var systems = system_data;
 var bodySelection = d3.select("#home");
 var select = d3.select('#home')
@@ -70,7 +71,7 @@ function buildPlanet(planet, orbitalScale) { //orbitalScale is the d3 scaling fu
         .attr('cy', sunYPosition)
         .attr("stroke", "lightgrey")
         .attr("stroke-width", "20")
-        .attr('opacity', .50)
+        .attr('opacity', 0)
         .attr("fill", "none")
         .attr("id", planet[0]+' selection')
         .on("click", function () {
@@ -184,41 +185,42 @@ function addSun(starN) {
 }
 
 function handleTabClick(systemDesc_2, planets, starN){ 
+    /*if (planets[0][system_headers.indexOf('HostStarColor')]){
+        var sunSelection = svgSelection.append("circle")
+            .attr("cx", sunXPosition)
+            .attr("cy", sunYPosition)
+            .attr("r", Number.parseFloat(planets[0][6] ? planets[0][6] : 1)**.5 *10)
+            .attr("style", "fill:" + planets[0][system_headers.indexOf('HostStarColor')]);//"url(#radial-gradient)");
+    }
+    else {
+        var animationHTML = `<animateTransform attributeName="transform"
+            type="rotate"
+            from="360 ${sunXPosition} ${sunYPosition}" to="0 ${sunXPosition} ${sunYPosition}"
+            begin="0s" dur="1s"
+            repeatCount="indefinite"
+        />`
+        var sun1Selection = svgSelection.append("circle")
+            .attr("cx", sunXPosition+3)
+            .attr("cy", sunYPosition)
+            .attr("r", (Number.parseFloat(planets[0][6] ? planets[0][6] : 0.0) + Number.parseInt(10)))
+            .attr("style", "fill:" + '#ffd2a1')
+            .html(animationHTML);
+        var sun2Selection = svgSelection.append("circle")
+            .attr("cx", sunXPosition-15)
+            .attr("cy", sunYPosition)
+            .attr("r", (Number.parseFloat(planets[0][6] ? planets[0][6] : 0.0) + Number.parseInt(10))/3)
+            .attr("style", "fill:" + '#A52A2A')//"url(#radial-gradient)");
+            .html(animationHTML);
+
+    }*/
+    drawSun(planets[0]);
     switch(menuSelected){
         case "desc":
-        removeHomeTab(); 
-        removeChartsTab();
-        addHomeDivs(systemDesc_2,starN);
-        if (planets[0][system_headers.indexOf('HostStarColor')]){
-            var sunSelection = svgSelection.append("circle")
-                .attr("cx", sunXPosition)
-                .attr("cy", sunYPosition)
-                .attr("r", Number.parseFloat(planets[0][6] ? planets[0][6] : 1)**.5 *10)
-                .attr("style", "fill:" + planets[0][system_headers.indexOf('HostStarColor')]);//"url(#radial-gradient)");
-        }
-        else {
-            var animationHTML = `<animateTransform attributeName="transform"
-                type="rotate"
-                from="360 ${sunXPosition} ${sunYPosition}" to="0 ${sunXPosition} ${sunYPosition}"
-                begin="0s" dur="1s"
-                repeatCount="indefinite"
-            />`
-            var sun1Selection = svgSelection.append("circle")
-                .attr("cx", sunXPosition+3)
-                .attr("cy", sunYPosition)
-                .attr("r", (Number.parseFloat(planets[0][6] ? planets[0][6] : 0.0) + Number.parseInt(10)))
-                .attr("style", "fill:" + '#ffd2a1')
-                .html(animationHTML);
-            var sun2Selection = svgSelection.append("circle")
-                .attr("cx", sunXPosition-15)
-                .attr("cy", sunYPosition)
-                .attr("r", (Number.parseFloat(planets[0][6] ? planets[0][6] : 0.0) + Number.parseInt(10))/3)
-                .attr("style", "fill:" + '#A52A2A')//"url(#radial-gradient)");
-                .html(animationHTML);
-    
-        }
-        
-        break;
+            removeHomeTab(); 
+            removeChartsTab();
+            addHomeDivs(systemDesc_2,starN);
+            
+            break;
         case "graphs":
         removeHomeTab(); 
         removeChartsTab();
@@ -231,11 +233,42 @@ function handleTabClick(systemDesc_2, planets, starN){
     } 
 }
 
+function drawSun(planet){
+    console.log(planet)
+    if (planet[system_headers.indexOf('HostStarColor')]){
+        var sunSelection = svgSelection.append("circle")
+            .attr("cx", sunXPosition)
+            .attr("cy", sunYPosition)
+            .attr("r", Number.parseFloat(planet[6] ? planet[6] : 1)**.5 *10)
+            .attr("style", "fill:" + planet[system_headers.indexOf('HostStarColor')]);//"url(#radial-gradient)");
+    }
+    else {
+        var animationHTML = `<animateTransform attributeName="transform"
+            type="rotate"
+            from="360 ${sunXPosition} ${sunYPosition}" to="0 ${sunXPosition} ${sunYPosition}"
+            begin="0s" dur="1s"
+            repeatCount="indefinite"
+        />`
+        var sun1Selection = svgSelection.append("circle")
+            .attr("cx", sunXPosition+3)
+            .attr("cy", sunYPosition)
+            .attr("r", (Number.parseFloat(planet[6] ? planet[6] : 0.0) + Number.parseInt(10)))
+            .attr("style", "fill:" + '#ffd2a1')
+            .html(animationHTML);
+        var sun2Selection = svgSelection.append("circle")
+            .attr("cx", sunXPosition-15)
+            .attr("cy", sunYPosition)
+            .attr("r", (Number.parseFloat(planet[6] ? planet[6] : 0.0) + Number.parseInt(10))/3)
+            .attr("style", "fill:" + '#A52A2A')//"url(#radial-gradient)");
+            .html(animationHTML);
+    }
+}
+
 function onchange() {
     cleanSvg();
     buildSolarSystem();
-    planetTable();
     starTable();
+    planetTable();
     buildPlot_0();
 
 }
@@ -459,4 +492,3 @@ function buildPlot_0() {
 }
 
 buildSolarSystem();
-planetTable();
