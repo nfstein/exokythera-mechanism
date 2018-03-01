@@ -1,4 +1,7 @@
 const stars = ["Kepler-9", "Sun", "HD 10180", "Kepler-90", "Gliese 667 C", "HD 219134", "tau ceti", "HD 40307", "Gliese 581", "TRAPPIST-1"];
+
+//possible additions: mu Arae, Gliese 3293   they are close to earth and have 2 habitable planets each
+
 const system_headers = [
     "PlanetIdentifier",
     "DiscoveryMethod",

@@ -109,6 +109,7 @@ function extraOrbits(planet,orbitalScale) {
         .attr("opacity", .2)
         .attr("id", 'habitable zone');*/
 
+    
     var liberalHabitable = svgSelection.append("path")
         .attr("d", getPath(radius))
         .attr("stroke", "green")
@@ -180,7 +181,7 @@ function handleTabClick(systemDesc_2, planets, starN){
     switch(menuSelected){
         case "desc":
         removeHomeTab(); 
-        removeChartsTab();
+        manageChartsTab();
         getHomeDivs(systemDesc_2,starN);
         if (planets[0][system_headers.indexOf('HostStarColor')]){
             var sunSelection = svgSelection.append("circle")
@@ -351,11 +352,11 @@ function buildPlots() {
         if (planet[11]) {
             var rad = Number.parseFloat(planet[11])
             radii.push(rad)
-            sizes.push(rad*20)
+            sizes.push(rad**.5*20)
         } else {
             var rad = (((Number.parseFloat(planet[10])/4)**.33)*density)
             radii.push(rad)
-            sizes.push(rad*20)
+            sizes.push(rad**.5*20)
         }
         if (planet[10]) {
             mass.push(planet[10])
@@ -364,7 +365,9 @@ function buildPlots() {
     })
 
 
-    var bubbleTrace02 = {'marker': {'color': 'red', 'opacity': 0.9, 'size': sizes},
+    var bubbleTrace02 = {
+        'name': starName + ' System',
+        'marker': {'color': 'red', 'opacity': 0.9, 'size': sizes},
         'mode': 'lines+markers',
         'text': names,
         'x': mass,
