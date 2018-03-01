@@ -33,12 +33,29 @@ function removeHomeTab(){
     d3.selectAll("p").data([]).exit().remove();
 }
 
-function manageChartsTab(){
+function removeChartsTab(){
     ids = ['chart1','chart2','chart3','chart4']
     ids.forEach(id => { 
         d3.select('#'+id).remove();
-        d3.select('#charts').append('div').attr('id', id);
     })
+}
+
+function addChartsGroup1(){
+    ids = ['chart1','chart2']
+    ids.forEach(id => { 
+        d3.select('#charts_1_2').append('div').attr('id', id).attr('class',
+        id === 'chart1' ? 'chart_first' : 'chart_second');
+    });
+    buildPlots();
+}
+
+function addChartsGroup2(){
+    ids = ['chart3','chart4']
+    ids.forEach(id => { 
+        d3.select('#charts_3_4').append('div').attr('id', id).attr('class', 
+        id === 'chart2' ? 'chart_first' : 'chart_second');
+    });
+    //buildPlots();
 }
 
 function menuBarHandler(event){ 
@@ -54,4 +71,20 @@ function menuBarHandler(event){
         handleTabClick();
      }
                              
+}
+
+function addHomeDivs(systemDesc_2, starN){
+    var h1 = d3.select("div.w3-padding-large").append("h1")
+    .attr("class", "w3-center")
+    .text(starN);
+    var h5 = d3.select("div.w3-padding-large").append("h5")
+    .attr("class", "w3-center")
+    .text("Heading");
+    var p1 = d3.select("div.w3-padding-large").append("p")
+    .attr("class", "w3-large")
+    .text(systemDesc_1[0][starN]);
+    var p2 = d3.select("div.w3-padding-large").append("p")
+    .attr("class", "w3-large w3-hide-medium")
+    .text(systemDesc_2[0][starN]);
+    ;
 }
