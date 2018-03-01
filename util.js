@@ -37,6 +37,7 @@ function removeChartsTab(){
     ids = ['chart1','chart2','chart3','chart4']
     ids.forEach(id => { 
         d3.select('#'+id).remove();
+
     })
 }
 
