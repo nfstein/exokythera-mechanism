@@ -62,8 +62,16 @@ img {
   background-color: #4CAF50 !important;
 }
 
+.chart_parent_0 {
+  width: 1500px;
+  margin:0 auto;
+  padding: 0px;
+  overflow:hidden;/*contain child floats*/
+}
+
 .chart_parent {
   width: 1500px;
+  height:1000px;
   margin:0 auto;
   padding: 0px;
   overflow:hidden;/*contain child floats*/

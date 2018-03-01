@@ -34,10 +34,19 @@ function removeHomeTab(){
 }
 
 function removeChartsTab(){
-    ids = ['chart1','chart2','chart3','chart4']
+    ids = ['chart0','chart1','chart2','chart3','chart4']
     ids.forEach(id => { 
         d3.select('#'+id).remove();
     })
+}
+
+function addChartsGroup0(){
+    ids = ['chart0']
+    ids.forEach(id => { 
+        divForSvg.append('div').attr('id', id).attr('class',
+        id === 'chart0' ? 'chart_first' : 'chart_second').attr('style',"padding-left:100px");
+    });
+    buildPlot_0();
 }
 
 function addChartsGroup1(){
