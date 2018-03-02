@@ -78,7 +78,12 @@ function menuBarHandler(event){
         buildSolarSystem();
      }
      else{
-        handleTabClick();
+        const starName = document.getElementById("stars").value;
+        //filter all the planets for this sun
+        const indexOfStarName = system_headers.indexOf("HostStar")
+        const planets = system_data.filter(x => x[indexOfStarName] && x[indexOfStarName].toLowerCase() === starName.toLowerCase());
+    
+        handleTabClick(0,planets,);
      }
                              
 }

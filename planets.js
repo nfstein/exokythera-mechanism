@@ -406,9 +406,12 @@ function starTable () {
         "HostStarOuterHabitabilityAU", //18
     ]
 
-    tableHTML = '<table style="width:100%"><tr><th>HostStar</th><th>'+starName+ '</th></tr>'
+    tableHTML = '<table style="width:100%; text-align:center"><tr><th>HostStar</th><th>'+starName+ '</th></tr>'
     rows.forEach(row => {
-        tableHTML += `<tr><th>${row.slice(8)}</th><td>${planet[system_headers.indexOf(row)]}</td></tr>`
+        if (isNaN(planet[system_headers.indexOf(row)])){
+            var value = planet[system_headers.indexOf(row)]
+        } else {value = +Number.parseFloat(planet[system_headers.indexOf(row)]).toFixed(4)}
+        tableHTML += `<tr><th>${row.slice(8)}</th><td>${value}</td></tr>`
     })
     tableHTML += '</table>'
     d3.select('#chartTest').html(tableHTML)
@@ -431,16 +434,22 @@ function planetTable () {
         "Eccentricity", //3
         "ListsPlanetIsOn", //8
     ]
-    tableHTML = '<table style="width:100%"><tr><th>Planet</th>'
+
+    tableHTML = '<table style="width:100%; text-align:center;"><tr><th>Planet</th>'
     planets.forEach(planet => {
         tableHTML += '<th>' +planet[0]+ '</th>'
     })
+
     tableHTML += '</tr>'
     rows.forEach(row => {
         rowHTML = '<tr><th>'+ row + '</th>'
         index = system_headers.indexOf(row)
         planets.forEach(planet => {
-            rowHTML += '<td>'+ planet[index] +'</td>'
+            if (isNaN(value = planet[index])){
+                var value = planet[index]
+            } else {value = +Number.parseFloat(planet[index]).toFixed(4)}
+
+            rowHTML += '<td>'+ value +'</td>'
         })
         rowHTML += '</tr>'
         tableHTML += rowHTML
