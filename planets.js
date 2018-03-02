@@ -383,12 +383,93 @@ function buildPlots() {
         'x': mass,
         'y': radii
     }
+    var bubbleTraceLayout = {
+        title: 'Planetary Mass vs Radius',
+        xaxis: {
+            title: 'Jupiter Masses of Planet',
+            },
+        yaxis: {
+          title: 'Jupiter Radii of Planet',
+          titlefont: {
+            size: 16,
+            color: 'rgb(107, 107, 107)'
+          },
+          tickfont: {
+            size: 14,
+            color: 'rgb(107, 107, 107)'
+          }
+        },
+        legend: {
+            x: .8,
+            y: 1.0,
+            bgcolor: 'rgba(255, 255, 255, 0)',
+            bordercolor: 'rgba(255, 255, 255, 0)'
+          },
 
-    Plotly.newPlot('chart0', [bubbleTrace01, bubbleTrace02], )
+    }
+
+    Plotly.newPlot('chart0', [bubbleTrace01, bubbleTrace02], bubbleTraceLayout)
     Plotly.newPlot('chart1', [barTrace01, barTrace02], barLayout)
-    Plotly.newPlot('chart2', [bubbleTrace01, bubbleTrace02], )
+    buildSpacial();
     Plotly.newPlot('chart3', [barTrace01, barTrace02], barLayout)
     Plotly.newPlot('chart4', [bubbleTrace01, bubbleTrace02], )
+}
+
+function buildSpacial () {
+    const starName = document.getElementById("stars").value;
+
+    starCoords = {
+        'Kepler-9': [-1539.9039134475752, 500.2603491155542, 1368.5415246630942],
+        'Sun': null,
+        'HD 10180': [-68.25830277523994, 52.92520452735363, 92.80157703921971],
+        'Kepler-90': [-173.61122965974192, 1448.00591950006, -2084.5084196005596],
+        'Gliese 667 C': [10.896255655714036, -17.532596898521373, 9.522265664891716],
+        'HD 219134': [-16.034878818331286, 6.7051134387771025, 12.399801099313779],
+        'tau ceti': [-7.348373975649817, -8.966760485982912, 2.7085466148903614],
+        'HD 40307': [-34.08155637669682, -21.03977322734041, 13.862934868740846],
+        'Gliese 581': [-2.306532255654748, -1.3269252260781572, -20.078753716681728],
+        'TRAPPIST-1': [6.611653176571944, 11.558431830781737, 38.740674990977574]
+    }
+    var spacialTrace02 = {
+        'x':[ 0], 'y': [0], 'z': [0],
+        'mode': 'markers',
+        'name': 'Sun',
+        'text': 'Sun',
+        'marker': {
+            'size': 8,
+            'color': 'yellow',
+            'line': {
+            'width': 0.5,
+            'opacity': .5
+            },
+            'opacity': 1,
+        },
+        'type': 'scatter3d'
+    }
+    if (!(starCoords[starName])){
+        return Plotly.newPlot('chart2', [spacialTrace01, spacialTrace02], spacialLayout)
+    }
+    
+    coord = starCoords[starName]
+    var spacialTrace03 = {
+        'x':[coord[0]], 'y': [coord[1]], 'z': [coord[2]],
+        'mode': 'markers',
+        'name': 'System ' + starName,
+        'text': starName,
+        'marker': {
+            'size': 10,
+            'color': 'orange',
+            'line': {
+            'width': 0.5,
+            'opacity': .5
+            },
+            'opacity': 1,
+        },
+        'type': 'scatter3d'
+    }
+    console.log(spacialTrace02)
+    Plotly.newPlot('chart2', [spacialTrace01, spacialTrace02, spacialTrace03], spacialLayout)
+
 }
 
 function starTable () {
@@ -398,14 +479,14 @@ function starTable () {
     const planet = system_data.filter(x => x[indexOfStarName] && x[indexOfStarName].toLowerCase() === starName.toLowerCase())[0];
 
     rows = [
-        "HostStarClass", //19
         "HostStarMassSlrMass", //4
         "HostStarRadiusSlrRad", //6
-        "HostStarTempK", //7
-        "HostStarMetallicity", //5
-        "HostStarLuminosity", //16
         "HostStarInnerHabitabilityAU", //17
         "HostStarOuterHabitabilityAU", //18
+        "HostStarTempK", //7
+        "HostStarClass", //19
+        "HostStarMetallicity", //5
+        "HostStarLuminosity", //16
         "HostStarDistanceFromSunLY", //21
     ]
 
@@ -505,3 +586,5 @@ function buildPlot_0() {
 }
 
 buildSolarSystem();
+starTable();
+planetTable();
