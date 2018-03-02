@@ -64,6 +64,7 @@ img {
 
 .chart_parent_0 {
   width: 1500px;
+  height: 100%;
   margin:0 auto;
   padding: 0px;
   overflow:hidden;/*contain child floats*/
@@ -71,20 +72,21 @@ img {
 
 .chart_parent {
   width: 1500px;
-  height:1000px;
+  height:100%;
   margin:0 auto;
   padding: 0px;
   overflow:hidden;/*contain child floats*/
 }
 .chart_first {
   width: 680px;
-  height: 500px;
+  height: 100%;
   float: left;
+  overflow: auto;
 }
 
 .chart_second {
   width: 680px;
-  height: 500px;
+  height: 100%;
   float: right;
 }
 
@@ -109,22 +111,22 @@ img {
 }
 
 
-#systemTable {
+.systemTable {
   font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
   border-collapse: collapse;
   width: 100%;
 }
 
-#systemTable td, #systemTable th {
+.systemTable td, .systemTable th {
   border: 1px solid #ddd;
   padding: 8px;
 }
 
-#systemTable tr:nth-child(even){background-color: #f2f2f2;}
+.systemTable tr:nth-child(even){background-color: #f2f2f2;}
 
-#systemTable tr:hover {background-color: #ddd;}
+.systemTable tr:hover {background-color: #ddd;}
 
-#systemTable th {
+.systemTable th {
   padding-top: 12px;
   padding-bottom: 12px;
   text-align: left;

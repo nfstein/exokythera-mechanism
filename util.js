@@ -78,10 +78,8 @@ function addHomeDivs(systemDesc_2, starN){
     d3.select('div.w3-padding-smaller').attr("class","w3-col m6 w3-padding-smaller scroll-area_0");
     var h1 = d3.select("div.w3-padding-smaller").append("h1")
     .attr("class", "w3-center")
-    .text(starN);
-    var h5 = d3.select("div.w3-padding-smaller").append("h5")
-    .attr("class", "w3-center")
-    .text(quotes[0][starN]);
+    .append("a")
+    .attr("href", systemLinks[0][starN]).attr("target","_blank").text(starN);
     var p1 = d3.select("div.w3-padding-smaller").append("p")
     .attr("class", "w3-large")
     .text(systemDesc_1[0][starN]);
