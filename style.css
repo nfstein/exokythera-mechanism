@@ -46,7 +46,7 @@ img {
 
 .icon-bar a {
   float: left;
-  width: 25%;
+  width: 50%;
   text-align: center;
   padding: 12px 0;
   transition: all 0.3s ease;
@@ -86,4 +86,24 @@ img {
   width: 680px;
   height: 500px;
   float: right;
+}
+
+.scroll-area{
+  width:50%;
+  height:470px;
+  margin-top:0px;
+  float:left;
+  overflow-y:scroll;
+  align-content: right;
+  padding-left: "200px"
+}
+
+.scroll-area_0{
+  width:50%;
+  height:500px;
+  margin-top:0px;
+  float:left;
+  overflow-y:scroll;
+  align-content: right;
+  padding-left: "200px"
 }
