@@ -95,7 +95,7 @@ function buildSolarSystem() {
     //sqrt scale makes tiny orbits larger and giant orbits smaller
     var orbitalScale = d3.scaleSqrt()
         .domain([.00001,maxRadius]) //not quite zero to avoid undefineds
-        .range([0,.8*d3.min([svgHeight,svgWidth])/2]); //range leaves a 10% border around edge
+        .range([0,0.6*d3.min([svgHeight,svgWidth])/2]); //range leaves a 10% border around edge
 
     extraOrbits(planets[0], orbitalScale) //populates earth orbit, habitable zone
     planets.map((x, i) => {
@@ -264,8 +264,6 @@ function onchange() {
     buildSolarSystem();
     starTable();
     planetTable();
-    buildPlot_0();
-    buildPlot();
 }
 
 function getGradient() {
@@ -408,7 +406,7 @@ function starTable () {
         "HostStarOuterHabitabilityAU", //18
     ]
 
-    tableHTML = '<table style="width:100%; text-align:center"><tr><th>HostStar</th><th>'+starName+ '</th></tr>'
+    tableHTML = '<table style="width:100%;  text-align:center"  border="2"><tr><th>HostStar</th><th>'+starName+ '</th></tr>'
     rows.forEach(row => {
         if (isNaN(planet[system_headers.indexOf(row)])){
             var value = planet[system_headers.indexOf(row)]
@@ -416,7 +414,7 @@ function starTable () {
         tableHTML += `<tr><th>${row.slice(8)}</th><td>${value}</td></tr>`
     })
     tableHTML += '</table>'
-    d3.select('#chartTest').html(tableHTML)
+    d3.select('#systemTable').html(tableHTML)
 
 }
 function planetTable () {
@@ -458,7 +456,7 @@ function planetTable () {
     })
     tableHTML += '</table>'
     console.log(tableHTML)
-    d3.select('#chartTest').html(tableHTML)
+    d3.select('#systemTable').html(tableHTML)
 }
 /** For now have this method to just add 1 chart in the same row as svg*/
 function buildPlot_0() {

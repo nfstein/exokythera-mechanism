@@ -31,6 +31,7 @@ function removeHomeTab(){
     d3.selectAll("h1").data([]).exit().remove();
     d3.selectAll("h5").data([]).exit().remove();
     d3.selectAll("p").data([]).exit().remove();
+    d3.select('div.w3-padding-smaller').attr("class","w3-col m6 w3-padding-smaller");
     d3.select('div#all').attr("class","");
 }
 
@@ -74,16 +75,17 @@ function menuBarHandler(event){
 }
 
 function addHomeDivs(systemDesc_2, starN){
-    var h1 = d3.select("div.w3-padding-large").append("h1")
+    d3.select('div.w3-padding-smaller').attr("class","w3-col m6 w3-padding-smaller scroll-area_0");
+    var h1 = d3.select("div.w3-padding-smaller").append("h1")
     .attr("class", "w3-center")
     .text(starN);
-    var h5 = d3.select("div.w3-padding-large").append("h5")
+    var h5 = d3.select("div.w3-padding-smaller").append("h5")
     .attr("class", "w3-center")
     .text(quotes[0][starN]);
-    var p1 = d3.select("div.w3-padding-large").append("p")
+    var p1 = d3.select("div.w3-padding-smaller").append("p")
     .attr("class", "w3-large")
     .text(systemDesc_1[0][starN]);
-    var p2 = d3.select("div.w3-padding-large").append("p")
+    var p2 = d3.select("div.w3-padding-smaller").append("p")
     .attr("class", "w3-large w3-hide-medium")
     .text(systemDesc_2[0][starN]+" To know more about your favorite system click ").append("a")
     .attr("href", systemLinks[0][starN]).attr("target","_blank").text("here.");

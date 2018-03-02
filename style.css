@@ -48,10 +48,10 @@ img {
   float: left;
   width: 50%;
   text-align: center;
-  padding: 12px 0;
+  padding: 0px 0px;
   transition: all 0.3s ease;
   color: white;
-  font-size: 36px;
+  font-size: 20px;
 }
 
 .icon-bar a:hover {
@@ -90,7 +90,7 @@ img {
 
 .scroll-area{
   width:50%;
-  height:470px;
+  height:500px;
   margin-top:0px;
   float:left;
   overflow-y:scroll;
@@ -100,10 +100,34 @@ img {
 
 .scroll-area_0{
   width:50%;
-  height:500px;
+  height:560px;
   margin-top:0px;
   float:left;
   overflow-y:scroll;
   align-content: right;
   padding-left: "200px"
+}
+
+
+#systemTable {
+  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#systemTable td, #systemTable th {
+  border: 1px solid #ddd;
+  padding: 8px;
+}
+
+#systemTable tr:nth-child(even){background-color: #f2f2f2;}
+
+#systemTable tr:hover {background-color: #ddd;}
+
+#systemTable th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  text-align: left;
+  background-color: #4CAF50;
+  color: white;
 }
