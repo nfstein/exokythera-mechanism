@@ -1,7 +1,7 @@
 //reading data csv
 
-const svgWidth = 600;
-const svgHeight = 800;
+const svgWidth = 680;
+const svgHeight = 500;
 const sunXPosition = 100;//svgWidth/2;
 const sunYPosition = 100//svgHeight/2;
 var systems = system_data;
@@ -97,7 +97,7 @@ function buildSolarSystem() {
     //sqrt scale makes tiny orbits larger and giant orbits smaller
     var orbitalScale = d3.scaleSqrt()
         .domain([.00001,maxRadius]) //not quite zero to avoid undefineds
-        .range([0,.8*d3.min([svgHeight,svgWidth])/2]); //range leaves a 10% border around edge
+        .range([0,.9*d3.min([svgHeight,svgWidth])/2]); //range leaves a 10% border around edge
 
     extraOrbits(planets[0], orbitalScale) //populates earth orbit, habitable zone
     planets.map((x, i) => {
@@ -118,7 +118,7 @@ function extraOrbits(planet,orbitalScale) {
 
     var inner = orbitalScale(Number.parseFloat(planet[system_headers.indexOf("HostStarInnerHabitabilityAU")]))
     var outer = orbitalScale(Number.parseFloat(planet[system_headers.indexOf("HostStarOuterHabitabilityAU")]))
-
+    console.log(planet[17])
     var width = outer-inner
     var radius = (width)/2 + inner
     
@@ -268,7 +268,7 @@ function onchange() {
     cleanSvg();
     buildSolarSystem();
     starTable();
-    planetTable();
+    //planetTable();
     buildPlot_0();
 
 }
@@ -289,7 +289,7 @@ function getGradient() {
     habitabilityScore.sort(compare);
     var colors = []
     habitabilityScore.map((x, i) => {
-        colors.push(d3.interpolateSpectral((i + Number.parseInt(1)) / habitabilityScore.length));
+        colors.push(d3.interpolateRdYlGn((i + Number.parseInt(1)) / habitabilityScore.length));
     })
     habitabilityScore.map((x, i) => {
         x["color"] = colors[i];
@@ -417,6 +417,7 @@ function starTable () {
     d3.select('#chartTest').html(tableHTML)
 
 }
+
 function planetTable () {
     const starName = document.getElementById("stars").value;
     //filter all the planets for this sun
@@ -458,6 +459,7 @@ function planetTable () {
     console.log(tableHTML)
     d3.select('#chartTest').html(tableHTML)
 }
+
 /** For now have this method to just add 1 chart in the same row as svg*/
 function buildPlot_0() {
     const starName = document.getElementById("stars").value; 

@@ -64,6 +64,7 @@ img {
 
 .chart_parent_0 {
   width: 1500px;
+  height: 100%;
   margin:0 auto;
   padding: 0px;
   overflow:hidden;/*contain child floats*/
@@ -71,19 +72,20 @@ img {
 
 .chart_parent {
   width: 1500px;
-  height:1000px;
+  height:100%;
   margin:0 auto;
   padding: 0px;
   overflow:hidden;/*contain child floats*/
 }
 .chart_first {
   width: 680px;
-  height: 500px;
+  height: 100%;
   float: left;
+  overflow: auto;
 }
 
 .chart_second {
   width: 680px;
-  height: 500px;
+  height: 100%;
   float: right;
 }

@@ -3,27 +3,27 @@ const stars = ["Kepler-9", "Sun", "HD 10180", "Kepler-90", "Gliese 667 C", "HD 2
 //possible additions: mu Arae, Gliese 3293   they are close to earth and have 2 habitable planets each
 
 const system_headers = [
-    "PlanetIdentifier",
-    "DiscoveryMethod",
-    "DiscoveryYear",
-    "Eccentricity",
-    "HostStarMassSlrMass",
-    "HostStarMetallicity",
-    "HostStarRadiusSlrRad",
-    "HostStarTempK",
-    "ListsPlanetIsOn",
-    "PeriodDays",
-    "PlanetaryMassJpt",
-    "RadiusJpt",
-    "SemiMajorAxisAU",
-    "SurfaceTempK",
-    "TypeFlag",
-    "HostStar",
-    "HostStarLuminosity",
-    "HostStarInnerHabitabilityAU",
-    "HostStarOuterHabitabilityAU",
-    "HostStarClass",
-    "HostStarColor"
+    "PlanetIdentifier", //0
+    "DiscoveryMethod", //1
+    "DiscoveryYear", //2
+    "Eccentricity", //3
+    "HostStarMassSlrMass", //4
+    "HostStarMetallicity", //5
+    "HostStarRadiusSlrRad", //6
+    "HostStarTempK", //7
+    "ListsPlanetIsOn", //8
+    "PeriodDays", //9
+    "PlanetaryMassJpt", //10
+    "RadiusJpt", //11
+    "SemiMajorAxisAU", //12
+    "SurfaceTempK", //13
+    "TypeFlag", //14
+    "HostStar", //15
+    "HostStarLuminosity", //16
+    "HostStarInnerHabitabilityAU", //17
+    "HostStarOuterHabitabilityAU", //18
+    "HostStarClass", //19
+    "HostStarColor" //20
   ];
 const system_data = [
     [
@@ -1194,8 +1194,7 @@ const system_data = [
       "0",
       "HD 40307",
       "",
-      "",
-      "",
+      "0.5428870276519004", "0.7821100598996292",
       "K",
       "#ffd2a1"
     ],
@@ -1217,8 +1216,7 @@ const system_data = [
       "0",
       "HD 40307",
       "",
-      "",
-      "",
+      "0.5428870276519004", "0.7821100598996292",
       "K",
       "#ffd2a1"
     ],
@@ -1240,8 +1238,7 @@ const system_data = [
       "0",
       "HD 40307",
       "",
-      "",
-      "",
+      "0.5428870276519004", "0.7821100598996292",
       "K",
       "#ffd2a1"
     ],
@@ -1263,8 +1260,7 @@ const system_data = [
       "0",
       "HD 40307",
       "",
-      "",
-      "",
+      "0.5428870276519004", "0.7821100598996292",
       "K",
       "#ffd2a1"
     ],
@@ -1286,8 +1282,7 @@ const system_data = [
       "0",
       "HD 40307",
       "",
-      "",
-      "",
+      "0.5428870276519004", "0.7821100598996292",
       "K",
       "#ffd2a1"
     ],
@@ -1309,8 +1304,7 @@ const system_data = [
       "0",
       "HD 40307",
       "",
-      "",
-      "",
+      "0.5428870276519004", "0.7821100598996292",
       "K",
       "#ffd2a1"
     ],
@@ -1655,17 +1649,4 @@ const systemLinks =[{
   "Gliese 581":"https://en.wikipedia.org/wiki/Gliese_581",
   "TRAPPIST-1":"https://en.wikipedia.org/wiki/TRAPPIST-1"
 
-}]
-
-const quotes =[{
-  "Kepler-9":'"Nature uses as little as possible of anything." — Johannes Kepler" ',
-  "Sun": '"Turn you face to the Sun and the shadows fall behind you." - Unknown"',
-  "HD 10180":'Only two things are infinite, the universe and human stupidity, and I\'m not sure about the former."— Albert Einstein,"',
-  "Kepler-90":'“…. after the laws of physics, everything else is an opinion.” - some random dude"',
-  "Gliese 667 C":'"I believe we exist in a multiverse of universes." Michio Kaku"',
-  "HD 219134":'“That’s one small step for a man, one giant leap for mankind.” - Neil Armstrong"',
-  "tau ceti":'“My view of our planet was a glimpse of divinity.” - Edgar Mitchell',
-  "HD 40307":'“If you are overweight on Earth, don’t blame dark matter." - Fitness freak',
-  "Gliese 581":'"The wonder is, not that the field of stars of so vast, but that man has measured it." - The Garden of Epicurus"',
-  "TRAPPIST-1":'"We\'re nothing but the space dust. Trying to find Its way back to The stars. - X"'
 }]
