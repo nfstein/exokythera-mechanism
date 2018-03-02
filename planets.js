@@ -1,7 +1,7 @@
 //reading data csv
 
 const svgWidth = 680;
-const svgHeight = 500;
+const svgHeight = 600;
 const sunXPosition = 100;//svgWidth/2;
 const sunYPosition = 100//svgHeight/2;
 var systems = system_data;
@@ -413,7 +413,7 @@ function starTable () {
         if (isNaN(planet[system_headers.indexOf(row)])){
             var value = planet[system_headers.indexOf(row)]
         } else {value = +Number.parseFloat(planet[system_headers.indexOf(row)]).toFixed(4)}
-        tableHTML += `<tr><th>${row.slice(8)}</th><td>${value}</td></tr>`
+        tableHTML += `<tr><th style="background-color:black">${row.slice(8)}</th><td>${value}</td></tr>`
     })
     tableHTML += '</table>'
     d3.select('#star-table').html(tableHTML)

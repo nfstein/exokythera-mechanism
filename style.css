@@ -97,17 +97,28 @@ img {
   float:left;
   overflow-y:scroll;
   align-content: right;
-  padding-left: "200px"
+  padding-left: "200px";
 }
 
 .scroll-area_0{
-  width:50%;
+  width:49%;
   height:560px;
   margin-top:0px;
   float:left;
   overflow-y:scroll;
   align-content: right;
   padding-left: "200px"
+}
+
+.scroll-area_1{
+  width:100%;
+  height:560px;
+  margin-top:0px;
+  float:left;
+  overflow-y:scroll;
+  align-content: right;
+  padding-left: "200px";
+  padding-top: "20px";
 }
 
 
@@ -120,6 +131,7 @@ img {
 .systemTable td, .systemTable th {
   border: 1px solid #ddd;
   padding: 8px;
+  padding-top: "20px";
 }
 
 .systemTable tr:nth-child(even){background-color: #f2f2f2;}
