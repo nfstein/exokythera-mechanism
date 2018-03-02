@@ -263,7 +263,7 @@ function onchange() {
     cleanSvg();
     buildSolarSystem();
     starTable();
-    //planetTable();
+    planetTable();
     buildPlot_0();
     buildPlot();
 }
@@ -416,7 +416,7 @@ function starTable () {
         tableHTML += `<tr><th>${row.slice(8)}</th><td>${value}</td></tr>`
     })
     tableHTML += '</table>'
-    d3.select('#chartTest').html(tableHTML)
+    d3.select('#star-table').html(tableHTML)
 
 }
 
@@ -459,7 +459,7 @@ function planetTable () {
     })
     tableHTML += '</table>'
     console.log(tableHTML)
-    d3.select('#chartTest').html(tableHTML)
+    d3.select('#planet-table').html(tableHTML)
 }
 
 /** For now have this method to just add 1 chart in the same row as svg*/
