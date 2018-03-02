@@ -31,42 +31,27 @@ function removeHomeTab(){
     d3.selectAll("h1").data([]).exit().remove();
     d3.selectAll("h5").data([]).exit().remove();
     d3.selectAll("p").data([]).exit().remove();
+    d3.select('div#all').attr("class","");
 }
 
 function removeChartsTab(){
     ids = ['chart0','chart1','chart2','chart3','chart4']
     ids.forEach(id => { 
         d3.select('#'+id).remove();
-
     })
 }
 
-function addChartsGroup0(){
-    ids = ['chart0']
+
+function addChartsAll(){
+    ids = ['chart0','chart1','chart2','chart3','chart4'];
+    var divAll =   d3.select('div#all').attr("class","scroll-area");
     ids.forEach(id => { 
-        divForSvg.append('div').attr('id', id).attr('class',
-        id === 'chart0' ? 'chart_first' : 'chart_second').attr('style',"padding-left:100px");
-    });
-    buildPlot_0();
+        d3.select("div#all").append("div").attr('id',id);
+    })
+    buildPlotsAll();
 }
 
-function addChartsGroup1(){
-    ids = ['chart1','chart2']
-    ids.forEach(id => { 
-        d3.select('#charts_1_2').append('div').attr('id', id).attr('class',
-        id === 'chart1' ? 'chart_first' : 'chart_second');
-    });
-    buildPlot_0();
-}
 
-function addChartsGroup2(){
-    ids = ['chart3','chart4']
-    ids.forEach(id => { 
-        d3.select('#charts_3_4').append('div').attr('id', id).attr('class', 
-        id === 'chart2' ? 'chart_first' : 'chart_second');
-    });
-    //buildPlot_0();
-}
 
 function menuBarHandler(event){ 
      var previousMenu = d3.selectAll("a")

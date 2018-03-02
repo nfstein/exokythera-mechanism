@@ -11,8 +11,8 @@ var select = d3.select('#home')
     .attr('class', 'select')
     .attr('id', "stars")
     .on('change', onchange)
-var divForSvg =   bodySelection.append("div").attr('id', 'charts_0').attr('class', 'chart_parent_0');
-var svgSelection = divForSvg.append("svg")
+//var divForSvg =   bodySelection.append("div").attr('id', 'charts_0').attr('class', 'chart_parent_0');
+var svgSelection = bodySelection.append("svg")
     .attr("width", svgWidth)
     .attr("height", svgHeight)
     .attr("style", "padding-left: 18em; padding-top: 9em").attr('class','chart_first');
@@ -29,8 +29,6 @@ const density = 2 //mass density of planets
 
 //Appending planets to the body
 function buildPlanet(planet, orbitalScale) { //orbitalScale is the d3 scaling function
-
-
     var orbitSelection = svgSelection.append("path")
         .attr("d", getPath(orbitalScale(planet[12])))
         .attr("stroke", "lightgrey")
@@ -97,7 +95,7 @@ function buildSolarSystem() {
     //sqrt scale makes tiny orbits larger and giant orbits smaller
     var orbitalScale = d3.scaleSqrt()
         .domain([.00001,maxRadius]) //not quite zero to avoid undefineds
-        .range([0,.9*d3.min([svgHeight,svgWidth])/2]); //range leaves a 10% border around edge
+        .range([0,.8*d3.min([svgHeight,svgWidth])/2]); //range leaves a 10% border around edge
 
     extraOrbits(planets[0], orbitalScale) //populates earth orbit, habitable zone
     planets.map((x, i) => {
@@ -219,14 +217,11 @@ function handleTabClick(systemDesc_2, planets, starN){
             removeHomeTab(); 
             removeChartsTab();
             addHomeDivs(systemDesc_2,starN);
-            
             break;
         case "graphs":
         removeHomeTab(); 
         removeChartsTab();
-        addChartsGroup0();
-        addChartsGroup1();    
-        addChartsGroup2();                         
+        addChartsAll();                       
         break;
         default:
           break;
@@ -270,7 +265,7 @@ function onchange() {
     starTable();
     //planetTable();
     buildPlot_0();
-
+    buildPlot();
 }
 
 function getGradient() {
@@ -348,7 +343,10 @@ function getGradient() {
     return habitabilityScore;
 }
 
-/*function buildPlots() {
+function buildPlotsAll(){
+    buildPlots();
+}
+function buildPlots() {
     const starName = document.getElementById("stars").value; 
 
     const indexOfStarName = system_headers.indexOf("HostStar")
@@ -386,9 +384,13 @@ function getGradient() {
         'y': radii
     }
 
-    Plotly.newPlot('chart1', [bubbleTrace01, bubbleTrace02], )
-    Plotly.newPlot('chart2', [barTrace01, barTrace02], barLayout)
-}*/
+    Plotly.newPlot('chart0', [bubbleTrace01, bubbleTrace02], )
+    Plotly.newPlot('chart1', [barTrace01, barTrace02], barLayout)
+    Plotly.newPlot('chart2', [bubbleTrace01, bubbleTrace02], )
+    Plotly.newPlot('chart3', [barTrace01, barTrace02], barLayout)
+    Plotly.newPlot('chart4', [bubbleTrace01, bubbleTrace02], )
+}
+
 function starTable () {
     const starName = document.getElementById("stars").value;
     //filter all the planets for this sun
