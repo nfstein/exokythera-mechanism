@@ -406,6 +406,7 @@ function starTable () {
         "HostStarLuminosity", //16
         "HostStarInnerHabitabilityAU", //17
         "HostStarOuterHabitabilityAU", //18
+        "HostStarDistanceFromSunLY", //21
     ]
 
     tableHTML = '<table style="width:100%; text-align:center"><tr><th>HostStar</th><th>'+starName+ '</th></tr>'
