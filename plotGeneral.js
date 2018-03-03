@@ -2116,7 +2116,9 @@ var bubbleTrace01 = {
    2.085,
    1.197]}
 
-const barTrace01 = {
+
+
+   const barTrace01 = {
     'name': 'Systems with Exoplanets',
     'type': 'bar',
     'x': ['10^0', '10^1', '10^2', '10^3', '10^4'],

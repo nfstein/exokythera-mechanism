@@ -95,7 +95,7 @@ function buildSolarSystem() {
     //sqrt scale makes tiny orbits larger and giant orbits smaller
     var orbitalScale = d3.scaleSqrt()
         .domain([.00001,maxRadius]) //not quite zero to avoid undefineds
-        .range([0,.8*d3.min([svgHeight,svgWidth])/2]); //range leaves a 10% border around edge
+        .range([0,.7*d3.min([svgHeight,svgWidth])/2]); //range leaves a 10% border around edge
 
     extraOrbits(planets[0], orbitalScale) //populates earth orbit, habitable zone
     planets.map((x, i) => {
@@ -411,8 +411,8 @@ function buildPlots() {
     Plotly.newPlot('chart0', [bubbleTrace01, bubbleTrace02], bubbleTraceLayout)
     Plotly.newPlot('chart1', [barTrace01, barTrace02], barLayout)
     buildSpacial();
-    Plotly.newPlot('chart3', [barTrace01, barTrace02], barLayout)
-    Plotly.newPlot('chart4', [bubbleTrace01, bubbleTrace02], )
+    //Plotly.newPlot('chart3', [barTrace01, barTrace02], barLayout)
+    //Plotly.newPlot('chart4', [bubbleTrace01, bubbleTrace02], )
 }
 
 function buildSpacial () {
@@ -543,8 +543,7 @@ function planetTable () {
     console.log(tableHTML)
     d3.select('#planet-table').html(tableHTML)
 }
-/** For now have this method to just add 1 chart in the same row as svg*/
-function buildPlot_0() {
+/*function buildPlot_0() {
     const starName = document.getElementById("stars").value; 
 
     const indexOfStarName = system_headers.indexOf("HostStar")
@@ -583,7 +582,7 @@ function buildPlot_0() {
     }
 
     Plotly.newPlot('chart0', [bubbleTrace01, bubbleTrace02], );
-}
+}*/
 
 buildSolarSystem();
 starTable();
