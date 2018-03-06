@@ -12,7 +12,7 @@ The site is published on github pages for your enjoyment.
 
 ## Units
 All planet mass and radii are listed in Jupiter (aka Jovian) radii and mass which is a astronomical standard unit, 7.15e7 m (~11x Earth's radius) and 1.90e27 kg (~300x Earth Mass) respectively.   
-All planet orbital radii are listed in Astronomical Units which is equivalent to the average distance between the Earth and our Sun, 149 597 870 700 metres or 93 million miles.
+All planet orbital radii are listed in Astronomical Units which is equivalent to the average distance between the Earth and our Sun, 149 597 870 700 metres or 93 million miles.   
 All Star mass and radii are listed in Solar units relative to our Sun, 6.96e8 m (~100x Earth's Radius, ~10x Jupiter's Radius), and 2.00e30 kg.
 
 
