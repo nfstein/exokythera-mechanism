@@ -25,7 +25,7 @@ var options = select
         return d;
     });
 
-const density = 2 //mass density of planets
+const density = .15 //mass density of planets
 
 //Appending planets to the body
 function buildPlanet(planet, orbitalScale) { //orbitalScale is the d3 scaling function
@@ -50,7 +50,7 @@ function buildPlanet(planet, orbitalScale) { //orbitalScale is the d3 scaling fu
     }
     else { //those with no radius get populated by mass
         var planetSelection = svgSelection.append("circle")
-            .attr("r", (((planet[system_headers.indexOf('PlanetaryMassJpt')]/4)**.33)*density)**.5*20) //mass = volume*constant = c * 4/3 * pi * r^3
+            .attr("r", (((planet[system_headers.indexOf('PlanetaryMassJpt')]/4*density)**.33))**.5*20) //mass = volume*constant = c * 4/3 * pi * r^3
             .attr("style", "fill:" + "url(#gradient-" + planet[0] + ")")
     }
     planetSelection.on("click", function () {
@@ -364,14 +364,14 @@ function buildPlots() {
             radii.push(rad)
             sizes.push(rad**.5*20)
         } else {
-            var rad = (((Number.parseFloat(planet[10])/4)**.33)*density)
+            var rad = (((Number.parseFloat(planet[10])/(4*density))**.33))
             radii.push(rad)
             sizes.push(rad**.5*20)
         }
         if (planet[10]) {
             mass.push(planet[10])
         }
-        else {mass.push((((rad/density)**3)*4))}
+        else {mass.push(((rad)**3)*4*density)}
     })
 
 
@@ -431,7 +431,7 @@ function buildSpacial () {
         'TRAPPIST-1': [6.611653176571944, 11.558431830781737, 38.740674990977574]
     }
     var spacialTrace02 = {
-        'x':[ 0], 'y': [0], 'z': [0],
+        'x': [0], 'y': [0], 'z': [0],
         'mode': 'markers',
         'name': 'Sun',
         'text': 'Sun',
